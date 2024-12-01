@@ -6,6 +6,10 @@ import { HapticTab } from "@/components/HapticTab";
 import { IconSymbol } from "@/components/ui/IconSymbol";
 import TabBarBackground from "@/components/ui/TabBarBackground";
 import { useColorScheme } from "@/hooks/useColorScheme";
+import { appColors } from "@/constants/Colors";
+import HandsIcon from "@/assets/images/icons/handsIcon.svg";
+import BoxIcon from "@/assets/images/icons/boxIcon.svg";
+import ProfessionalsIcon from "@/assets/images/icons/professionalsIcon.svg";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -23,23 +27,34 @@ export default function TabLayout() {
           },
           default: {},
         }),
+        tabBarActiveTintColor: appColors.primary,
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
-          title: "Home",
+          title: "Ayuda",
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="house.fill" color={color} />
+            <HandsIcon width={28} height={28} fill={color} />
           ),
         }}
       />
       <Tabs.Screen
         name="explore"
         options={{
-          title: "Explore",
+          title: "Yo pude",
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="paperplane.fill" color={color} />
+            <BoxIcon width={28} height={28} fill={color} />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="directory"
+        options={{
+          title: "Profesionales",
+          tabBarIcon: ({ color }) => (
+            <ProfessionalsIcon width={28} height={28} fill={color} />
           ),
         }}
       />
