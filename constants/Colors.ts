@@ -11,6 +11,7 @@ const mutedText = "#6B6B6B";
 const overlay = "rgba(0,0,0,0.4)";
 const blue = "#125B9A";
 const softRed = "#C62E2E";
+const softBlue = "#E8F0FB";
 const softGreen = "#0B8494";
 const softGray = "#ECF0F4";
 const softPink = "#F05A7E";
@@ -60,4 +61,6 @@ export const appColors = {
   tagOrangeDark,
   tagYellow,
   tagPurple,
+  softRed,
+  softBlue,
 };
