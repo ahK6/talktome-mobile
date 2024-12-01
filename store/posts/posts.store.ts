@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { AsyncActionStatus } from "@/shared/types/enums.types";
-import { getUpdatedPosts } from "../helpers/getUpdatedPost";
 import { IPosts, PostTypes } from "./posts.types";
 import { getPostsByType } from "./posts.actions";
+import { getUpdatedPosts } from "./posts.helpers";
 
 const initialState: IPosts = {
   postsRequestingLists: [],
