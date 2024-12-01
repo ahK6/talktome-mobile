@@ -1,7 +1,5 @@
 import { Drawer } from "expo-router/drawer";
-
-import { router, useNavigation } from "expo-router";
-
+import { useNavigation } from "expo-router";
 import { Platform, Text, View } from "react-native";
 import { Header } from "@/components/shared/Header";
 
@@ -17,11 +15,17 @@ export default function Layout() {
           </View>
         )}
         screenOptions={{
-          //headerShown:false,
-          header: () => <Header />,
-          title: "",
+          header: (props) => <Header title={props.options.headerTitle} />,
         }}
-      ></Drawer>
+      >
+        <Drawer.Screen
+          name="(drawer)/(tabs)/index"
+          options={{
+            title: "Mi Título Personalizado",
+            headerTitle: "Test",
+          }}
+        />
+      </Drawer>
     </View>
   );
 }

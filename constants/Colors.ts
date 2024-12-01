@@ -15,7 +15,7 @@ const softBlue = "#E8F0FB";
 const softGreen = "#0B8494";
 const softGray = "#ECF0F4";
 const softPink = "#F05A7E";
-
+const lightBlue = "#FAFCFF";
 const primary = softPink;
 const secondary = softGreen;
 const tertiary = blue;
@@ -63,4 +63,5 @@ export const appColors = {
   tagPurple,
   softRed,
   softBlue,
+  lightBlue,
 };
