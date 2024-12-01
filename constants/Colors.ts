@@ -1,26 +1,63 @@
-/**
- * Below are the colors that are used in the app. The colors are defined in the light and dark mode.
- * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
- */
+const white = "#FFFFFF";
+const black = "#000000";
+//const gray = "#575757";
+const dark = "#25374D";
+const green = "#009045";
+const greenDark = "#2E6C37";
+const red = "#E8393A";
+const gray = "#52686D";
+const grayBorder = "#CED6DD";
+const mutedText = "#6B6B6B";
+const overlay = "rgba(0,0,0,0.4)";
+const blue = "#125B9A";
+const softRed = "#C62E2E";
+const softGreen = "#0B8494";
+const softGray = "#ECF0F4";
+const softPink = "#F05A7E";
 
-const tintColorLight = '#0a7ea4';
-const tintColorDark = '#fff';
+const primary = softPink;
+const secondary = softGreen;
+const tertiary = blue;
+const text = dark;
 
-export const Colors = {
-  light: {
-    text: '#11181C',
-    background: '#fff',
-    tint: tintColorLight,
-    icon: '#687076',
-    tabIconDefault: '#687076',
-    tabIconSelected: tintColorLight,
-  },
-  dark: {
-    text: '#ECEDEE',
-    background: '#151718',
-    tint: tintColorDark,
-    icon: '#9BA1A6',
-    tabIconDefault: '#9BA1A6',
-    tabIconSelected: tintColorDark,
-  },
+const transparent = "rgba(255,255,255,0)";
+
+const statusbarBg = dark;
+
+const backButton = dark;
+
+const selectedItemBorder = dark + "1A";
+
+//Tags
+const tagGray = "#ededed";
+const tagOrange = "#ffa900";
+const tagOrangeDark = "#ff6c00";
+const tagYellow = "#fff000";
+const tagPurple = "#302185";
+
+export const appColors = {
+  primary,
+  secondary,
+  red,
+  green,
+  greenDark,
+  tertiary,
+  gray,
+  grayBorder,
+  softGray,
+  text,
+  mutedText,
+  white,
+  black,
+  dark,
+  statusbarBg,
+  overlay,
+  transparent,
+  backButton,
+  selectedItemBorder,
+  tagGray,
+  tagOrange,
+  tagOrangeDark,
+  tagYellow,
+  tagPurple,
 };
