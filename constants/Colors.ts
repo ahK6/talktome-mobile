@@ -20,6 +20,7 @@ const primary = softPink;
 const secondary = softGreen;
 const tertiary = blue;
 const text = dark;
+const grayText = "#59698C";
 
 const transparent = "rgba(255,255,255,0)";
 
@@ -64,4 +65,5 @@ export const appColors = {
   softRed,
   softBlue,
   lightBlue,
+  grayText,
 };

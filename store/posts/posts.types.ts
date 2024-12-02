@@ -23,7 +23,7 @@ export interface IPost {
 
 export interface IPostParams {
   page: number;
-  pageSize: number;
+  pageSize?: number;
   type: PostTypes;
 }
 
