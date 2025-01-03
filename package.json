@@ -21,6 +21,7 @@
     "@react-navigation/native": "^7.0.9",
     "@reduxjs/toolkit": "^2.4.0",
     "axios": "^1.7.8",
+    "dayjs": "^1.11.13",
     "expo": "~52.0.11",
     "expo-blur": "~14.0.1",
     "expo-constants": "~17.0.3",

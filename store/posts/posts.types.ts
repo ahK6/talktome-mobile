@@ -13,7 +13,10 @@ export interface IPost {
   content: string;
   keywords: string[];
   status: string;
-  idUserCreator: string;
+  idUserCreator: {
+    id: string;
+    nickName: String;
+  };
   createdAt: Date;
   updatedAt: Date;
   comments?: any[];

@@ -1,17 +1,20 @@
 import React from "react";
-import { StyleSheet, View, ViewStyle } from "react-native";
+import { StyleSheet, TextStyle, View, ViewStyle } from "react-native";
 import { ThemedText } from "../ThemedText";
 import { appColors } from "@/constants/Colors";
 
 interface IProps {
   label: string;
   containerStyle?: ViewStyle;
+  textStyle?: TextStyle;
 }
 
-const CategoryItem = ({ label, containerStyle }: IProps) => {
+const CategoryItem = ({ label, containerStyle, textStyle }: IProps) => {
   return (
     <View style={[styles.container, containerStyle]}>
-      <ThemedText style={{ color: appColors.grayText }}>{label}</ThemedText>
+      <ThemedText style={[{ color: appColors.grayText }, textStyle]}>
+        {label}
+      </ThemedText>
     </View>
   );
 };
