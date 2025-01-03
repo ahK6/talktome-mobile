@@ -1,7 +1,7 @@
 import { AsyncActionStatus } from "@/shared/types/enums.types";
 
 export interface IPosts {
-  postsRequestingLists: IPost[];
+  postsRequestingLists: IPostElements;
   postsRequestingListStatus: AsyncActionStatus;
   postsHelpingLists: IPost[];
   postsHelpingListStatus: AsyncActionStatus;
@@ -12,6 +12,11 @@ export interface IPosts {
 export interface IKeywords {
   _id: string;
   value: string;
+}
+
+export interface IPostElements {
+  data: IPost[];
+  totalPages: number;
 }
 
 export interface IPost {

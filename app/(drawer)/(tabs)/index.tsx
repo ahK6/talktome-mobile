@@ -30,20 +30,23 @@ dayjs.extend(relativeTime);
 
 export default function HomeScreen() {
   const dispatch: AppDispatch = useDispatch();
-  const { postsRequestingLists, keywords } = useSelector(
-    (state: RootState) => state.posts
-  );
+  const { postsRequestingLists, postsRequestingListStatus, keywords } =
+    useSelector((state: RootState) => state.posts);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(20);
+  const [totalPages, setTotalPages] = useState(0);
 
-  const getPostsRequestingLists = () => {
-    dispatch(
+  const getPostsRequestingLists = async () => {
+    const result = await dispatch(
       getPostsByType({
         inputParams: { type: PostTypes.requesting, page: currentPage },
         shouldStoreOutputState: true,
       })
-    );
+    ).unwrap();
+
+    if (result.totalPages && currentPage === 1) {
+      setTotalPages(result.totalPages ?? 0);
+    }
   };
 
   const getKeywords = () => {
@@ -54,6 +57,12 @@ export default function HomeScreen() {
     getPostsRequestingLists();
     getKeywords();
   }, []);
+
+  useEffect(() => {
+    if (currentPage > 1) {
+      getPostsRequestingLists();
+    }
+  }, [currentPage]);
 
   const headerList = () => {
     return (
@@ -249,8 +258,19 @@ export default function HomeScreen() {
         ListHeaderComponent={headerList}
         style={{ marginTop: 60 }}
         renderItem={renderItem}
-        data={postsRequestingLists}
+        data={postsRequestingLists?.data}
         keyExtractor={(item) => item.id.toString()}
+        onEndReached={({ distanceFromEnd }) => {
+          if (distanceFromEnd <= 0 && postsRequestingLists.data?.length > 0) {
+            if (
+              postsRequestingListStatus !== "loading" &&
+              postsRequestingListStatus !== "error" &&
+              currentPage < totalPages
+            ) {
+              setCurrentPage(currentPage + 1);
+            }
+          }
+        }}
       />
     </SafeView>
   );

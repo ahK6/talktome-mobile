@@ -5,7 +5,7 @@ import { getAllKeywords, getPostsByType } from "./posts.actions";
 import { getUpdatedPosts } from "./posts.helpers";
 
 const initialState: IPosts = {
-  postsRequestingLists: [],
+  postsRequestingLists: { data: [], totalPages: 0 },
   postsRequestingListStatus: AsyncActionStatus.idle,
   postsHelpingLists: [],
   postsHelpingListStatus: AsyncActionStatus.idle,
@@ -34,15 +34,15 @@ const postsSlice = createSlice({
         if (action.meta.arg.shouldStoreOutputState) {
           if (action.meta.arg.inputParams.type === PostTypes.requesting) {
             const updated = getUpdatedPosts(
-              state.postsRequestingLists,
-              action.payload
+              state.postsRequestingLists.data,
+              action.payload.data
             );
             state.postsRequestingListStatus = AsyncActionStatus.done;
-            state.postsRequestingLists = updated;
+            state.postsRequestingLists.data = updated;
           } else {
             const updated = getUpdatedPosts(
               state.postsHelpingLists,
-              action.payload
+              action.payload.data
             );
             state.postsHelpingListStatus = AsyncActionStatus.done;
             state.postsHelpingLists = updated;

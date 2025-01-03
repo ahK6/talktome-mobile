@@ -13,7 +13,7 @@ export const getPostsByType = createAsyncThunkWithErrorHandling(
       `${apiUrl}/posts/get-all?page=${page}&pageSize=${pageSize}&type=${type}`
     );
 
-    return data.data;
+    return { data: data.data, totalPages: data.totalPages };
   }
 );
 
