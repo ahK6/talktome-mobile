@@ -1,6 +1,6 @@
 import SafeView from "@/components/shared/SafeView";
 import { ThemedText } from "@/components/ThemedText";
-import { getPostsByType } from "@/store/posts/posts.actions";
+import { getAllKeywords, getPostsByType } from "@/store/posts/posts.actions";
 import { IPost, PostTypes } from "@/store/posts/posts.types";
 import { AppDispatch, RootState } from "@/store/store";
 import { useEffect, useState } from "react";
@@ -30,7 +30,7 @@ dayjs.extend(relativeTime);
 
 export default function HomeScreen() {
   const dispatch: AppDispatch = useDispatch();
-  const { postsRequestingLists } = useSelector(
+  const { postsRequestingLists, keywords } = useSelector(
     (state: RootState) => state.posts
   );
 
@@ -46,8 +46,13 @@ export default function HomeScreen() {
     );
   };
 
+  const getKeywords = () => {
+    dispatch(getAllKeywords({}));
+  };
+
   useEffect(() => {
     getPostsRequestingLists();
+    getKeywords();
   }, []);
 
   const headerList = () => {
@@ -95,15 +100,13 @@ export default function HomeScreen() {
             Temas
           </ThemedText>
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {["Salud mental", "Depresión", "Ansiedad", "Autoestima"].map(
-              (item) => (
-                <CategoryItem
-                  key={item}
-                  label={item}
-                  containerStyle={{ marginRight: 10 }}
-                />
-              )
-            )}
+            {keywords?.map((item) => (
+              <CategoryItem
+                key={item._id}
+                label={item.value}
+                containerStyle={{ marginRight: 10 }}
+              />
+            ))}
           </ScrollView>
         </View>
       </View>

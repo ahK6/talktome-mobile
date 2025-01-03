@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { AsyncActionStatus } from "@/shared/types/enums.types";
 import { IPosts, PostTypes } from "./posts.types";
-import { getPostsByType } from "./posts.actions";
+import { getAllKeywords, getPostsByType } from "./posts.actions";
 import { getUpdatedPosts } from "./posts.helpers";
 
 const initialState: IPosts = {
@@ -9,6 +9,8 @@ const initialState: IPosts = {
   postsRequestingListStatus: AsyncActionStatus.idle,
   postsHelpingLists: [],
   postsHelpingListStatus: AsyncActionStatus.idle,
+  keywords: [],
+  keywordsStatus: AsyncActionStatus.idle,
 };
 
 const postsSlice = createSlice({
@@ -55,6 +57,18 @@ const postsSlice = createSlice({
             state.postsHelpingListStatus = AsyncActionStatus.error;
           }
         }
+      })
+
+      .addCase(getAllKeywords.pending, (state, action) => {
+        state.keywordsStatus = AsyncActionStatus.loading;
+      })
+      .addCase(getAllKeywords.fulfilled, (state, action) => {
+        state.keywordsStatus = AsyncActionStatus.done;
+        state.keywords = action.payload;
+      })
+
+      .addCase(getAllKeywords.rejected, (state, action) => {
+        state.keywordsStatus = AsyncActionStatus.error;
       });
   },
 });

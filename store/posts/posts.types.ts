@@ -5,6 +5,13 @@ export interface IPosts {
   postsRequestingListStatus: AsyncActionStatus;
   postsHelpingLists: IPost[];
   postsHelpingListStatus: AsyncActionStatus;
+  keywords: IKeywords[];
+  keywordsStatus: AsyncActionStatus;
+}
+
+export interface IKeywords {
+  _id: string;
+  value: string;
 }
 
 export interface IPost {

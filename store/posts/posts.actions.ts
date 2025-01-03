@@ -16,3 +16,16 @@ export const getPostsByType = createAsyncThunkWithErrorHandling(
     return data.data;
   }
 );
+
+export const getAllKeywords = createAsyncThunkWithErrorHandling(
+  "posts/getAllKeywords",
+  async ({
+    shouldStoreOutputState = true,
+  }: {
+    shouldStoreOutputState?: boolean;
+  }) => {
+    const { data } = await anonAxiosApi.get(`${apiUrl}/posts/get-keywords`);
+
+    return data.data;
+  }
+);
