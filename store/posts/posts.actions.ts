@@ -1,7 +1,7 @@
 import { anonAxiosApi } from "@/utils/axios/axiosInstances";
 import { createAsyncThunkWithErrorHandling } from "@/utils/middlewares/createAsyncThunkWithErrorHandling";
 import { apiUrl } from "@/constants/urls";
-import { IPostParams, PostTypes } from "./posts.types";
+import { IPostParams, IPostRequestingParams, PostTypes } from "./posts.types";
 
 export const getPostsByType = createAsyncThunkWithErrorHandling(
   "posts/getPostsByType",
@@ -27,5 +27,27 @@ export const getAllKeywords = createAsyncThunkWithErrorHandling(
     const { data } = await anonAxiosApi.get(`${apiUrl}/posts/get-keywords`);
 
     return data.data;
+  }
+);
+
+export const postRequest = createAsyncThunkWithErrorHandling(
+  "posts/postRequest",
+  async ({
+    inputParams: { title, content, keywords, type = PostTypes.requesting },
+  }: {
+    inputParams: IPostRequestingParams;
+  }) => {
+    const params = new URLSearchParams();
+    params.append("title", title);
+    params.append("content", content);
+    params.append("type", type);
+    keywords.forEach((keyword) => params.append("keywords", keyword));
+
+    const { data } = await anonAxiosApi.post(
+      `${apiUrl}/posts/create-post`,
+      params
+    );
+
+    return data;
   }
 );

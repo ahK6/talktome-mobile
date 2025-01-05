@@ -46,3 +46,10 @@ export enum PostTypes {
   requesting = "requesting",
   helping = "helping",
 }
+
+export interface IPostRequestingParams {
+  title: string;
+  content: string;
+  keywords: string[];
+  type: PostTypes;
+}
