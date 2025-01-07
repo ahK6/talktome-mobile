@@ -1,10 +1,23 @@
 import { Drawer } from "expo-router/drawer";
-import { useNavigation } from "expo-router";
+import { useNavigation, usePathname } from "expo-router";
 import { Platform, Text, View } from "react-native";
 import { Header } from "@/components/shared/Header";
+import { useEffect, useRef } from "react";
 
 export default function Layout() {
   const navigation = useNavigation();
+
+  const pathname = usePathname();
+
+  const titleRef = useRef<string>(null);
+
+  useEffect(() => {
+    console.log(pathname);
+    if (pathname === "/post/createPost") {
+      console.log("entroooooooo");
+      titleRef.current = "Crear publicación";
+    }
+  }, [pathname]);
 
   return (
     <View style={{ flex: 1 }}>
@@ -15,17 +28,12 @@ export default function Layout() {
           </View>
         )}
         screenOptions={{
-          header: (props) => <Header title={props.options.headerTitle} />,
+          header: (props) => {
+            console.log(props.options);
+            return <Header title={titleRef.current} />;
+          },
         }}
-      >
-        <Drawer.Screen
-          name="(drawer)/(tabs)/index"
-          options={{
-            title: "Mi Título Personalizado",
-            headerTitle: "Test",
-          }}
-        />
-      </Drawer>
+      ></Drawer>
     </View>
   );
 }

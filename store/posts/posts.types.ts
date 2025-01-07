@@ -51,5 +51,5 @@ export interface IPostRequestingParams {
   title: string;
   content: string;
   keywords: string[];
-  type: PostTypes;
+  type?: PostTypes;
 }

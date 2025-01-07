@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, TextStyle, View, ViewStyle } from "react-native";
-import { ThemedText } from "../ThemedText";
+import { ThemedText } from "./ThemedText";
 import { appColors } from "@/constants/Colors";
 
 interface IProps {

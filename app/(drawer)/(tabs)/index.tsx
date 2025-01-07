@@ -1,5 +1,5 @@
 import SafeView from "@/components/shared/SafeView";
-import { ThemedText } from "@/components/ThemedText";
+import { ThemedText } from "@/components/shared/ThemedText";
 import { getAllKeywords, getPostsByType } from "@/store/posts/posts.actions";
 import { IPost, PostTypes } from "@/store/posts/posts.types";
 import { AppDispatch, RootState } from "@/store/store";
@@ -25,6 +25,7 @@ import IconClock from "@/assets/images/icons/iconClock.svg";
 import IconComment from "@/assets/images/icons/iconComment.svg";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import { router } from "expo-router";
 
 dayjs.extend(relativeTime);
 
@@ -97,7 +98,9 @@ export default function HomeScreen() {
             </ThemedText>
             <ButtonThemed
               text="Publicar"
-              onPress={() => {}}
+              onPress={() => {
+                router.navigate("/(drawer)/post/createPost");
+              }}
               color="primary"
               size="md"
               style={{ marginTop: 20 }}
