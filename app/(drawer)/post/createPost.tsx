@@ -5,14 +5,58 @@ import DropDownPicker from "react-native-dropdown-picker";
 import { appColors } from "@/constants/Colors";
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/store/store";
+import { postRequest } from "@/store/posts/posts.actions";
+import { showToast } from "@/components/shared/notifications/toast";
+import { router } from "expo-router";
 
 export default function TabTwoScreen() {
+  const dispatch: AppDispatch = useDispatch();
+
   const { keywords } = useSelector((state: RootState) => state.posts);
 
   const [open, setOpen] = useState(false);
   const [values, setValues] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+
+  const createPostHandler = async () => {
+    try {
+      if (!title || !content || !values.length) {
+        if (values.length < 2) {
+          return showToast("Debes seleccionar al menos dos categorías", {
+            type: "danger",
+          });
+        }
+
+        return showToast("Debes completar todos los campos", {
+          type: "danger",
+        });
+      }
+      setLoading(true);
+      await dispatch(
+        postRequest({ inputParams: { title, content, keywords: values } })
+      ).unwrap();
+      setTitle("");
+      setContent("");
+      setValues([]);
+      setOpen(false);
+      showToast("Publicación creado con éxito", { type: "success" });
+      router.navigate("/(drawer)/");
+    } catch (error: any) {
+      showToast(
+        error.response?.data?.error ?? "Error al crear la publicación",
+        {
+          type: "danger",
+        }
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <SafeView topSafe bottomSafe avoidKeyboard>
@@ -23,7 +67,12 @@ export default function TabTwoScreen() {
           flex: 1,
         }}
       >
-        <TextInputThemed label="Título" placeholder="Título" />
+        <TextInputThemed
+          label="Título"
+          placeholder="Título"
+          onChangeText={setTitle}
+          value={title}
+        />
         <TextInputThemed
           label="Describe tu situación"
           placeholder="Escribe todos los detalles"
@@ -35,6 +84,8 @@ export default function TabTwoScreen() {
             backgroundColor: appColors.lightBlue,
             textAlignVertical: "top",
           }}
+          onChangeText={setContent}
+          value={content}
         />
         <View style={{ marginTop: 50 }}>
           <DropDownPicker
@@ -70,7 +121,8 @@ export default function TabTwoScreen() {
             width: "90%",
           }}
           text="Publicar"
-          onPress={() => {}}
+          onPress={createPostHandler}
+          loading={loading}
         />
       </View>
     </SafeView>

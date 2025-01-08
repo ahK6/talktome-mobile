@@ -1,4 +1,4 @@
-import { anonAxiosApi } from "@/utils/axios/axiosInstances";
+import { anonAxiosApi, privateAxiosApi } from "@/utils/axios/axiosInstances";
 import { createAsyncThunkWithErrorHandling } from "@/utils/middlewares/createAsyncThunkWithErrorHandling";
 import { apiUrl } from "@/constants/urls";
 import { IPostParams, IPostRequestingParams, PostTypes } from "./posts.types";
@@ -43,11 +43,11 @@ export const postRequest = createAsyncThunkWithErrorHandling(
     params.append("type", type);
     keywords.forEach((keyword) => params.append("keywords", keyword));
 
-    const { data } = await anonAxiosApi.post(
+    const { data } = await privateAxiosApi.post(
       `${apiUrl}/posts/create-post`,
       params
     );
 
-    return data;
+    return undefined;
   }
 );

@@ -32,8 +32,8 @@ export default function RootLayout() {
   return (
     <ToastProvider
       offsetBottom={90}
-      successColor={appColors.primary}
-      dangerColor={appColors.secondary}
+      successColor={appColors.secondary}
+      dangerColor={appColors.primary}
     >
       <Provider store={store}>
         <Stack>
