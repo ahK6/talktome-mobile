@@ -48,6 +48,6 @@ export const postRequest = createAsyncThunkWithErrorHandling(
       params
     );
 
-    return undefined;
+    return data;
   }
 );

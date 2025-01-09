@@ -4,14 +4,8 @@ import axios, {
   InternalAxiosRequestConfig,
 } from "axios";
 
-export const anonAxiosApi = axios.create({
-  timeout: 20000,
-  timeoutErrorMessage: "ERROR_TIMEOUT_ANONAPI",
-});
+export const anonAxiosApi = axios.create();
 export const privateAxiosApi = axios.create();
-
-axios.defaults.headers.common["Content-Type"] = "application/json";
-axios.defaults.headers.common["Accept"] = "application/json";
 
 const anonRequestInterceptor = async (
   request: InternalAxiosRequestConfig<any>

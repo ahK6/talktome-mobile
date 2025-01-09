@@ -34,7 +34,7 @@ export default function TextInputThemed(props: TextInputThemedProps) {
             backgroundColor: appColors.lightBlue,
             height: 50,
             borderRadius: 5,
-            borderWidth: 0.5,
+            borderWidth: 2,
             borderColor: appColors.softBlue,
             paddingHorizontal: 10,
             color: appColors.text,
@@ -44,7 +44,9 @@ export default function TextInputThemed(props: TextInputThemedProps) {
         {...props}
         //activeOutlineColor={formColors.outlineActive}
       />
-      {props.errorMessage && <Text style={{}}>{props.errorMessage}</Text>}
+      {props.errorMessage && (
+        <Text style={{ color: appColors.primary }}>{props.errorMessage}</Text>
+      )}
     </View>
   );
 }

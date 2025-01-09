@@ -11,7 +11,7 @@ import { postRequest } from "@/store/posts/posts.actions";
 import { showToast } from "@/components/shared/notifications/toast";
 import { router } from "expo-router";
 
-export default function TabTwoScreen() {
+export default function CreatePost() {
   const dispatch: AppDispatch = useDispatch();
 
   const { keywords } = useSelector((state: RootState) => state.posts);
