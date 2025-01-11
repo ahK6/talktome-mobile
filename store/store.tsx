@@ -4,10 +4,12 @@ import { configureStore, Reducer } from "@reduxjs/toolkit";
 import { persistStore, persistReducer, PersistConfig } from "redux-persist";
 import { asyncErrorMiddleware } from "../utils/middlewares";
 import postsReducer from "./posts/posts.store";
+import onBoardingReducer from "./onBoarding/onBoarding.store";
 
 const store = configureStore({
   reducer: {
     posts: postsReducer,
+    onBoarding: onBoardingReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
