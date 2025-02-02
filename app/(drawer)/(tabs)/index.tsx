@@ -12,6 +12,7 @@ import {
   FlatList,
   View,
   ScrollView,
+  TouchableOpacity,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { LinearGradient } from "expo-linear-gradient";
@@ -127,7 +128,7 @@ export default function HomeScreen() {
 
   const renderItem = ({ item }: { item: IPost }) => {
     return (
-      <View
+      <TouchableOpacity
         style={{
           height: "auto",
           borderWidth: 1,
@@ -136,6 +137,14 @@ export default function HomeScreen() {
           paddingHorizontal: 15,
           paddingTop: 20,
           marginTop: 20,
+        }}
+        onPress={() => {
+          router.navigate({
+            pathname: "/(drawer)/post/postDetail",
+            params: {
+              postId: item._id,
+            },
+          });
         }}
       >
         <View
@@ -250,7 +259,7 @@ export default function HomeScreen() {
             </View>
           </View>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   };
 

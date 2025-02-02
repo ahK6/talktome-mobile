@@ -53,3 +53,16 @@ export interface IPostRequestingParams {
   keywords: string[];
   type?: PostTypes;
 }
+
+export interface IPostDetail {
+  _id: string;
+  title: string;
+  content: string;
+  keywords: string[];
+  status: string;
+  idUserCreator: string;
+  createdAt: Date;
+  updatedAt: Date;
+  comments: any[];
+  id: string;
+}

@@ -1,7 +1,12 @@
 import { anonAxiosApi, privateAxiosApi } from "@/utils/axios/axiosInstances";
 import { createAsyncThunkWithErrorHandling } from "@/utils/middlewares/createAsyncThunkWithErrorHandling";
 import { apiUrl } from "@/constants/urls";
-import { IPostParams, IPostRequestingParams, PostTypes } from "./posts.types";
+import {
+  IPostDetail,
+  IPostParams,
+  IPostRequestingParams,
+  PostTypes,
+} from "./posts.types";
 
 export const getPostsByType = createAsyncThunkWithErrorHandling(
   "posts/getPostsByType",
@@ -46,6 +51,22 @@ export const postRequest = createAsyncThunkWithErrorHandling(
     const { data } = await privateAxiosApi.post(
       `${apiUrl}/posts/create-post`,
       params
+    );
+
+    return data;
+  }
+);
+
+export const postDetail = createAsyncThunkWithErrorHandling(
+  "posts/postDetail",
+  async ({
+    inputParams: { idPost },
+  }: {
+    inputParams: { idPost: string };
+  }): Promise<IPostDetail> => {
+    console.log("wekfjwlkefjkwelfj");
+    const { data } = await anonAxiosApi.get(
+      `${apiUrl}/posts/get-post?idPost=${idPost}`
     );
 
     return data;
