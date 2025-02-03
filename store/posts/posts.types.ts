@@ -66,3 +66,19 @@ export interface IPostDetail {
   comments: any[];
   id: string;
 }
+
+export type IComments = {
+  data: IComment[];
+};
+
+export type IComment = {
+  _id: string;
+  idPost: string;
+  content: string;
+  status: string;
+  likes: number;
+  idUserCreator: null;
+  createdAt: Date;
+  updatedAt: Date;
+  __v: number;
+};

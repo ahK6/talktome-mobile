@@ -6,8 +6,8 @@ import { appColors } from "@/constants/Colors";
 import UserCircle from "@/assets/images/icons/userCircle.svg";
 import IconClock from "@/assets/images/icons/iconClock.svg";
 import IconComment from "@/assets/images/icons/iconComment.svg";
-import { postDetail } from "@/store/posts/posts.actions";
-import { IPostDetail } from "@/store/posts/posts.types";
+import { postComments, postDetail } from "@/store/posts/posts.actions";
+import { IComment, IPostDetail } from "@/store/posts/posts.types";
 import { AppDispatch, RootState } from "@/store/store";
 import { useIsFocused } from "@react-navigation/native";
 import PagerView from "react-native-pager-view";
@@ -29,6 +29,7 @@ const PostDetail = () => {
   const [postDetailInfo, setPostDetailInfo] = useState<IPostDetail | null>(
     null
   );
+  const [postCommentsList, setPostCommentsList] = useState<IComment[]>([]);
   const [loading, setLoading] = useState(false);
 
   const [selectedTab, setSelectedTab] = useState(0);
@@ -53,12 +54,31 @@ const PostDetail = () => {
     }
   };
 
-  const getPostComments = async () => {};
+  const getPostComments = async () => {
+    setLoading(true);
+    try {
+      const res = await dispatch(
+        postComments({ inputParams: { idPost: params.postId as string } })
+      ).unwrap();
+      setPostCommentsList(res.data);
+    } catch (error: any) {
+      showToast(
+        error.response?.data?.error ?? "Error al obtener los detalles",
+        {
+          type: "danger",
+        }
+      );
+      router.back();
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     if (isVisible) {
       if (params.postId) {
         getPostDetail();
+        getPostComments();
       } else {
         showToast("Especifica un ID de publicación", { type: "danger" });
         router.back();
