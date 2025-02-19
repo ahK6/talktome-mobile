@@ -73,8 +73,8 @@ export const postDetail = createAsyncThunkWithErrorHandling(
   }
 );
 
-export const postComments = createAsyncThunkWithErrorHandling(
-  "posts/postComments",
+export const getcommentsByPostId = createAsyncThunkWithErrorHandling(
+  "posts/getcommentsByPostId",
   async ({
     inputParams: { idPost },
   }: {
@@ -82,6 +82,26 @@ export const postComments = createAsyncThunkWithErrorHandling(
   }): Promise<IComments> => {
     const { data } = await anonAxiosApi.get(
       `${apiUrl}/comments/get-comments?idPost=${idPost}`
+    );
+
+    return data;
+  }
+);
+
+export const postComment = createAsyncThunkWithErrorHandling(
+  "posts/postComment",
+  async ({
+    inputParams: { idPost, commentContent },
+  }: {
+    inputParams: { idPost: string; commentContent: string };
+  }): Promise<any> => {
+    const params = new URLSearchParams();
+    params.append("idPost", idPost);
+    params.append("content", commentContent);
+
+    const { data } = await privateAxiosApi.post(
+      `${apiUrl}/comments/create-comment`,
+      params
     );
 
     return data;

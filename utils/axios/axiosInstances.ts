@@ -43,7 +43,7 @@ const privateRequestInterceptor = async (
   //
   // await setAuthHeader();
   const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NzczYzc4OGEwMWQwOGNkMzJjMjc5NCIsInBob25lTnVtYmVyIjoiMTIzMTIzMjExMTF3dyIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzM2MjA4OTc1LCJleHAiOjE3MzYyNTIxNzV9.tR6whqUfetCCwftUpYVX6Y5ZuNilc3ERxlLRTkW0-4E";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3N2YxYTc5YTZjZmQ3NzU5MTA0MmU0NiIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzM4NTQ1OTYxLCJleHAiOjE3Mzg1ODkxNjF9.XZBPPrRGLGNUk4aXaPfYXCHJ8gxVFt5kqI7_Oh2UqIk";
 
   // if (!!store.getState().customers.loggedInfo?.data?.access_token) {
   request.headers.Authorization = `Bearer ${token}`;
