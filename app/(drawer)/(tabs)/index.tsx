@@ -100,7 +100,7 @@ export default function HomeScreen() {
             <ButtonThemed
               text="Publicar"
               onPress={() => {
-                router.navigate("/(drawer)/onBoarding/login");
+                router.navigate("/(drawer)/post/createPost");
               }}
               color="primary"
               size="md"

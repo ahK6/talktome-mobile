@@ -124,6 +124,7 @@ const Login = () => {
         >
           No tienes cuenta?{" "}
           <ThemedText
+            onPress={() => router.replace("/(drawer)/onBoarding/createAccount")}
             style={{
               textAlign: "center",
               marginTop: 15,

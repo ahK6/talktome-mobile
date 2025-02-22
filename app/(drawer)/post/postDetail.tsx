@@ -24,6 +24,7 @@ import {
   FlatList,
   ScrollView,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -38,6 +39,7 @@ const PostDetail = () => {
   const params = useLocalSearchParams();
   const isVisible = useIsFocused();
   const refPagerView = useRef(null);
+  const commentInputRef = useRef<TextInput>(null);
 
   const dispatch: AppDispatch = useDispatch();
 
@@ -322,6 +324,14 @@ const PostDetail = () => {
             </ScrollView>
           </ScrollView>
           <ButtonThemed
+            onPress={() => {
+              setSelectedTab(1);
+              refPagerView.current?.setPage(1);
+
+              setTimeout(() => {
+                setTextBoxFocused(true);
+              }, 600);
+            }}
             style={{
               position: "absolute",
               bottom: 20,
@@ -351,6 +361,7 @@ const PostDetail = () => {
           >
             <View style={{ flex: 1 }}>
               <TextInputThemed
+                ref={commentInputRef}
                 value={commentText}
                 onChangeText={(value) => {
                   if (textBoxFocused === false) {
