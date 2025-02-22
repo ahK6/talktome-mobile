@@ -11,7 +11,12 @@ const initialState: IUser = {
 const onBoardingSlice = createSlice({
   name: "onBoarding",
   initialState,
-  reducers: {},
+  reducers: {
+    logout: (state) => {
+      state.userInfo = undefined;
+      state.userInfoStatus = AsyncActionStatus.idle;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(login.pending, (state, action) => {
@@ -33,7 +38,7 @@ const onBoardingSlice = createSlice({
   },
 });
 
-export const {} = onBoardingSlice.actions;
+export const { logout } = onBoardingSlice.actions;
 
 const onBoardingReducer = onBoardingSlice.reducer;
 export default onBoardingReducer;

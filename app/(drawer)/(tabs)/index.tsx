@@ -34,6 +34,7 @@ export default function HomeScreen() {
   const dispatch: AppDispatch = useDispatch();
   const { postsRequestingLists, postsRequestingListStatus, keywords } =
     useSelector((state: RootState) => state.posts);
+  const { userInfo } = useSelector((state: RootState) => state.onBoarding);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
@@ -100,7 +101,11 @@ export default function HomeScreen() {
             <ButtonThemed
               text="Publicar"
               onPress={() => {
-                router.navigate("/(drawer)/post/createPost");
+                if (userInfo?.token) {
+                  router.navigate("/(drawer)/post/createPost");
+                } else {
+                  router.navigate("/(drawer)/onBoarding/login");
+                }
               }}
               color="primary"
               size="md"

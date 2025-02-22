@@ -19,6 +19,7 @@ type NViewProps = {
   bottomSafeAreaStyle?: ViewStyle;
   statusBarStyle?: StatusBarStyle;
   children: React.ReactNode;
+  containerStyle?: ViewStyle;
 };
 
 const SafeView: React.FC<NViewProps> = ({
@@ -29,9 +30,10 @@ const SafeView: React.FC<NViewProps> = ({
   contentStyle,
   bottomSafeAreaStyle,
   statusBarStyle,
+  containerStyle,
 }) => {
   return (
-    <View style={{ flex: 1, backgroundColor: "white" }}>
+    <View style={[{ flex: 1, backgroundColor: "white" }, containerStyle]}>
       {!!topSafe && (
         <SafeAreaView
           edges={["top"]}
