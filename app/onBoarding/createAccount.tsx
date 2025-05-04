@@ -58,7 +58,7 @@ export default function CreateAccount() {
         type: "success",
       });
 
-      router.navigate("/(drawer)");
+      router.navigate("/");
     } catch (error: any) {
       showToast(error.response?.data?.error ?? "Error al crear la cuenta", {
         type: "danger",
@@ -74,7 +74,7 @@ export default function CreateAccount() {
         <ScrollView
           contentContainerStyle={{
             paddingHorizontal: 15,
-            marginTop: 75,
+            marginTop: 20,
             flex: 1,
           }}
         >
@@ -148,7 +148,7 @@ export default function CreateAccount() {
               alignSelf: "center",
               width: "90%",
             }}
-            text="Publicar"
+            text="Crear cuenta"
             onPress={handleSubmit(onSubmit)}
             loading={loading}
           />

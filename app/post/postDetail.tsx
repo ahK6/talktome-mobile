@@ -200,7 +200,7 @@ const PostDetail = () => {
       <View>
         <TabBarPost
           refPagerView={refPagerView}
-          containerStyle={{ marginTop: 50 }}
+          containerStyle={{ marginTop: 20 }}
           selectedTab={selectedTab}
         />
 

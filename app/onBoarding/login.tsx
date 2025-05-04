@@ -61,7 +61,7 @@ const Login = () => {
       <ScrollView
         contentContainerStyle={{
           paddingHorizontal: 15,
-          marginTop: 75,
+          marginTop: 20,
           flex: 1,
         }}
       >
@@ -124,7 +124,7 @@ const Login = () => {
         >
           No tienes cuenta?{" "}
           <ThemedText
-            onPress={() => router.replace("/(drawer)/onBoarding/createAccount")}
+            onPress={() => router.replace("/onBoarding/createAccount")}
             style={{
               textAlign: "center",
               marginTop: 15,

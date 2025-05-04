@@ -102,9 +102,9 @@ export default function HomeScreen() {
               text="Publicar"
               onPress={() => {
                 if (userInfo?.token) {
-                  router.navigate("/(drawer)/post/createPost");
+                  router.navigate("/post/createPost");
                 } else {
-                  router.navigate("/(drawer)/onBoarding/login");
+                  router.navigate("/onBoarding/login");
                 }
               }}
               color="primary"
@@ -145,7 +145,7 @@ export default function HomeScreen() {
         }}
         onPress={() => {
           router.navigate({
-            pathname: "/(drawer)/post/postDetail",
+            pathname: "/post/postDetail",
             params: {
               postId: item._id,
             },
@@ -273,7 +273,7 @@ export default function HomeScreen() {
       <FlatList
         contentContainerStyle={{ padding: 15 }}
         ListHeaderComponent={headerList}
-        style={{ marginTop: 60 }}
+        style={{ marginTop: 20 }}
         renderItem={renderItem}
         data={postsRequestingLists?.data}
         keyExtractor={(item) => item.id.toString()}

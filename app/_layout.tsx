@@ -37,7 +37,23 @@ export default function RootLayout() {
     >
       <Provider store={store}>
         <Stack>
-          <Stack.Screen name="(drawer)" options={{ headerShown: false }} />
+          <Stack.Screen name="index" options={{ headerShown: false }} />
+          <Stack.Screen
+            name="onBoarding/login"
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="onBoarding/createAccount"
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="post/createPost"
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="post/postDetail"
+            options={{ headerShown: false }}
+          />
 
           <Stack.Screen name="+not-found" />
         </Stack>
