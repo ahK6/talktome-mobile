@@ -75,14 +75,14 @@ export default function HomeScreen() {
         </ThemedText>
         <LinearGradient
           colors={[
-            "rgba(240, 90, 126, 0.008)",
-            "rgba(240, 90, 126, 0.1)",
-            "rgba(240, 90, 126, 0.25)",
+            "rgba(11, 132, 148, 0.008)",
+            "rgba(11, 132, 148, 0.1)",
+            "rgba(11, 132, 148, 0.25)",
           ]}
           style={{
             height: 150,
             borderWidth: 0.5,
-            borderColor: appColors.primary,
+            borderColor: appColors.secondary,
             borderRadius: 5,
           }}
         >
@@ -107,7 +107,7 @@ export default function HomeScreen() {
                   router.navigate("/onBoarding/login");
                 }
               }}
-              color="primary"
+              color="secondary"
               size="md"
               style={{ marginTop: 20 }}
             />
@@ -271,9 +271,12 @@ export default function HomeScreen() {
   return (
     <SafeView topSafe bottomSafe>
       <FlatList
-        contentContainerStyle={{ padding: 15 }}
+        contentContainerStyle={{
+          paddingHorizontal: 15,
+          paddingVertical: 20,
+          paddingBottom: Platform.OS === "ios" ? 45 : 85,
+        }}
         ListHeaderComponent={headerList}
-        style={{ marginTop: 20 }}
         renderItem={renderItem}
         data={postsRequestingLists?.data}
         keyExtractor={(item) => item.id.toString()}

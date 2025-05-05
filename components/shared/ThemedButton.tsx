@@ -126,8 +126,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
   },
   primary: {
-    backgroundColor: appColors.primary,
-    borderColor: appColors.primary,
+    backgroundColor: appColors.secondary,
+    borderColor: appColors.secondary,
   },
   sm: {
     minHeight: 28,

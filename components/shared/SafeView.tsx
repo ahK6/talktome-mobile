@@ -39,12 +39,12 @@ const SafeView: React.FC<NViewProps> = ({
           edges={["top"]}
           style={{
             height: 0,
-            backgroundColor: appColors.softBlue,
+            backgroundColor: appColors.secondary,
           }}
         />
       )}
       <StatusBar
-        backgroundColor={appColors.statusbarBg}
+        backgroundColor={appColors.primary}
         barStyle={statusBarStyle ?? "light-content"}
       />
       {!!avoidKeyboard && (
@@ -65,7 +65,7 @@ const SafeView: React.FC<NViewProps> = ({
             { flex: 0, backgroundColor: appColors.white },
             !!bottomSafeAreaStyle
               ? bottomSafeAreaStyle
-              : { backgroundColor: appColors.white },
+              : { backgroundColor: appColors.secondary },
           ]}
         />
       )}

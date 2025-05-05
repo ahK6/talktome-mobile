@@ -1,6 +1,6 @@
 import SafeView from "@/components/shared/SafeView";
 import React, { useEffect, useState } from "react";
-import { Keyboard, ScrollView, Text } from "react-native";
+import { Keyboard, Platform, ScrollView, Text } from "react-native";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { AppDispatch } from "@/store/store";
@@ -144,7 +144,7 @@ export default function CreateAccount() {
           <ButtonThemed
             style={{
               position: "absolute",
-              bottom: 20,
+              bottom: Platform.OS === "ios" ? 50 : 90,
               alignSelf: "center",
               width: "90%",
             }}
