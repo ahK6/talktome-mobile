@@ -18,7 +18,7 @@ const TabBarPost = (props) => {
         <TabButtonTop
           text="Detalles"
           onPress={() => {
-            props.refPagerView.current.setPage(0);
+            props.setSelectedTab(0);
           }}
           focused={props.selectedTab === 0}
           style={{ width: "33.33%" }}
@@ -27,7 +27,7 @@ const TabBarPost = (props) => {
         <TabButtonTop
           text="Comentarios"
           onPress={() => {
-            props.refPagerView.current.setPage(1);
+            props.setSelectedTab(1);
           }}
           focused={props.selectedTab === 1}
           style={{

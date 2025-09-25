@@ -27,6 +27,7 @@ import IconComment from "@/assets/images/icons/iconComment.svg";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { router } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 dayjs.extend(relativeTime);
 
@@ -101,7 +102,7 @@ export default function HomeScreen() {
             <ButtonThemed
               text="Publicar"
               onPress={() => {
-                if (userInfo?.token) {
+                if (!!AsyncStorage.getItem("accessToken")) {
                   router.navigate("/(drawer)/post/createPost");
                 } else {
                   router.navigate("/(drawer)/onBoarding/login");

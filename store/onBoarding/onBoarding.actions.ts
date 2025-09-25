@@ -2,6 +2,7 @@ import { anonAxiosApi } from "@/utils/axios/axiosInstances";
 import { createAsyncThunkWithErrorHandling } from "@/utils/middlewares/createAsyncThunkWithErrorHandling";
 import { apiUrl } from "@/constants/urls";
 import { ICreateAccountParams, ILoginParams } from "./onBoarding.types";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const createAccount = createAsyncThunkWithErrorHandling(
   "onBoarding/createAccount",
@@ -43,6 +44,10 @@ export const login = createAsyncThunkWithErrorHandling(
         "Content-Type": "application/x-www-form-urlencoded",
       },
     });
+
+    console.log("wklefwekljefkwlj " + JSON.stringify(data, null, 2));
+
+    AsyncStorage.setItem("accessToken", data.token);
 
     return data;
   }

@@ -3,6 +3,7 @@ import axios, {
   AxiosResponse,
   InternalAxiosRequestConfig,
 } from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const anonAxiosApi = axios.create();
 export const privateAxiosApi = axios.create();
@@ -42,12 +43,11 @@ const privateRequestInterceptor = async (
   // Para incluir sesión
   //
   // await setAuthHeader();
-  const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3N2YxYTc5YTZjZmQ3NzU5MTA0MmU0NiIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzM4NTQ1OTYxLCJleHAiOjE3Mzg1ODkxNjF9.XZBPPrRGLGNUk4aXaPfYXCHJ8gxVFt5kqI7_Oh2UqIk";
+  const token = await AsyncStorage.getItem("accessToken");
 
-  // if (!!store.getState().customers.loggedInfo?.data?.access_token) {
-  request.headers.Authorization = `Bearer ${token}`;
-  // }
+  if (token) {
+    request.headers.Authorization = `Bearer ${token}`;
+  }
 
   if (__DEV__) {
     console.log("\n\n\n\n\n");
