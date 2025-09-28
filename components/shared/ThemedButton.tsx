@@ -3,6 +3,7 @@ import {
   StyleProp,
   StyleSheet,
   Text,
+  TextStyle,
   TouchableOpacity,
   ViewStyle,
 } from "react-native";
@@ -11,6 +12,7 @@ import { appColors } from "@/constants/Colors";
 
 type IProps = {
   style?: StyleProp<ViewStyle> | undefined;
+  textStyles?: StyleProp<TextStyle> | undefined;
   onPress?(): void;
   text: string;
   disabled?: boolean;
@@ -79,6 +81,7 @@ export default function ButtonThemed(props: IProps) {
               textDecorationColor: mainColor,
             },
             textStyle,
+            props.textStyles,
           ]}
           numberOfLines={1}
         >
@@ -98,6 +101,7 @@ export default function ButtonThemed(props: IProps) {
             {
               //fontFamily: appFonts.primary.regular_400,
             },
+            props.textStyles,
           ]}
         >
           {props.textSecondary}
