@@ -1,297 +1,143 @@
+import React, { useCallback } from "react";
+import {
+    FlatList,
+    View,
+    RefreshControl,
+    ActivityIndicator,
+} from "react-native";
 import SafeView from "@/components/shared/SafeView";
 import { ThemedText } from "@/components/shared/ThemedText";
-import { getAllKeywords, getPostsByType } from "@/store/posts/posts.actions";
-import { IPost, PostTypes } from "@/store/posts/posts.types";
-import { AppDispatch, RootState } from "@/store/store";
-import { useEffect, useState } from "react";
-import {
-  Image,
-  StyleSheet,
-  Platform,
-  Text,
-  FlatList,
-  View,
-  ScrollView,
-  TouchableOpacity,
-} from "react-native";
-import { useDispatch, useSelector } from "react-redux";
-import { LinearGradient } from "expo-linear-gradient";
 import { appColors } from "@/constants/Colors";
-import Hands from "@/assets/images/hands.svg";
-import ButtonThemed from "@/components/shared/ThemedButton";
-import CategoryItem from "@/components/shared/CategoryItem";
-import IconMessage from "@/assets/images/icons/iconMessages.svg";
-import UserCircle from "@/assets/images/icons/userCircle.svg";
-import IconClock from "@/assets/images/icons/iconClock.svg";
-import IconComment from "@/assets/images/icons/iconComment.svg";
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
-import { router } from "expo-router";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { IPost } from "@/store/posts/posts.types";
 
-dayjs.extend(relativeTime);
+// Components
+import { HomeHeader } from "@/components/HomeHeader";
+import { KeywordsFilter } from "@/components/KeywordsFilter";
+import { SearchResultsBanner } from "@/components/SearchResultsBanner";
+import { PostItem } from "@/components/PostItem";
+import { EmptyState } from "@/components/EmptyState";
+
+// Hooks
+import { useHomePosts } from "@/hooks/useHomePosts";
 
 export default function HomeScreen() {
-  const dispatch: AppDispatch = useDispatch();
-  const { postsRequestingLists, postsRequestingListStatus, keywords } =
-    useSelector((state: RootState) => state.posts);
-  const { userInfo } = useSelector((state: RootState) => state.onBoarding);
+    const {
+        displayData,
+        keywords,
+        isRefreshing,
+        selectedKeywords,
+        isSearchMode,
+        isSearching,
+        toggleKeyword,
+        clearFilters,
+        onRefresh,
+        handleLoadMore,
+    } = useHomePosts();
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(0);
+    const headerList = useCallback(() => {
+        return (
+            <View>
+                <HomeHeader />
+                <KeywordsFilter
+                    keywords={keywords}
+                    selectedKeywords={selectedKeywords}
+                    isSearchMode={isSearchMode}
+                    onToggleKeyword={toggleKeyword}
+                    onClearFilters={clearFilters}
+                />
+                <SearchResultsBanner
+                    isSearchMode={isSearchMode}
+                    isSearching={isSearching}
+                    resultCount={displayData.length}
+                    onClearFilters={clearFilters}
+                />
+            </View>
+        );
+    }, [
+        keywords,
+        selectedKeywords,
+        isSearchMode,
+        isSearching,
+        displayData.length,
+        toggleKeyword,
+        clearFilters,
+    ]);
 
-  const getPostsRequestingLists = async () => {
-    const result = await dispatch(
-      getPostsByType({
-        inputParams: { type: PostTypes.requesting, page: currentPage },
-        shouldStoreOutputState: true,
-      })
-    ).unwrap();
+    const renderItem = useCallback(
+        ({ item }: { item: IPost }) => <PostItem item={item} />,
+        []
+    );
 
-    if (result.totalPages && currentPage === 1) {
-      setTotalPages(result.totalPages ?? 0);
-    }
-  };
+    const renderEmptyComponent = useCallback(
+        () => (
+            <EmptyState
+                isSearching={isSearching}
+                isSearchMode={isSearchMode}
+                hasData={displayData.length > 0}
+            />
+        ),
+        [isSearching, isSearchMode, displayData.length]
+    );
 
-  const getKeywords = () => {
-    dispatch(getAllKeywords({}));
-  };
-
-  useEffect(() => {
-    getPostsRequestingLists();
-    getKeywords();
-  }, []);
-
-  useEffect(() => {
-    if (currentPage > 1) {
-      getPostsRequestingLists();
-    }
-  }, [currentPage]);
-
-  const headerList = () => {
     return (
-      <View>
-        <ThemedText type="title" style={{ marginBottom: 15 }}>
-          Necesitas ayuda?
-        </ThemedText>
-        <LinearGradient
-          colors={[
-            "rgba(240, 90, 126, 0.008)",
-            "rgba(240, 90, 126, 0.1)",
-            "rgba(240, 90, 126, 0.25)",
-          ]}
-          style={{
-            height: 150,
-            borderWidth: 0.5,
-            borderColor: appColors.primary,
-            borderRadius: 5,
-          }}
-        >
-          <View
-            style={{
-              position: "absolute",
-              right: 15,
-            }}
-          >
-            <Hands height={150} width={60} />
-          </View>
-          <View style={{ width: "75%", padding: 20 }}>
-            <ThemedText type="default" style={{ fontSize: 20 }}>
-              Encuentra personas dispuesta a escucharte
-            </ThemedText>
-            <ButtonThemed
-              text="Publicar"
-              onPress={() => {
-                if (!!AsyncStorage.getItem("accessToken")) {
-                  router.navigate("/(drawer)/post/createPost");
-                } else {
-                  router.navigate("/(drawer)/onBoarding/login");
+        <SafeView topSafe bottomSafe>
+            <FlatList
+                contentContainerStyle={{ padding: 15 }}
+                ListHeaderComponent={headerList}
+                style={{ marginTop: 60 }}
+                renderItem={renderItem}
+                data={displayData}
+                keyExtractor={(item) =>
+                    item._id?.toString() || Math.random().toString()
                 }
-              }}
-              color="primary"
-              size="md"
-              style={{ marginTop: 20 }}
+                refreshControl={
+                    <RefreshControl
+                        refreshing={isRefreshing}
+                        onRefresh={onRefresh}
+                        colors={[appColors.primary]}
+                        tintColor={appColors.primary}
+                    />
+                }
+                onEndReached={handleLoadMore}
+                ListEmptyComponent={renderEmptyComponent}
+                removeClippedSubviews={true}
+                maxToRenderPerBatch={10}
+                updateCellsBatchingPeriod={50}
+                windowSize={10}
+                initialNumToRender={10}
+                getItemLayout={(data, index) => ({
+                    length: 200,
+                    offset: 200 * index,
+                    index,
+                })}
             />
-          </View>
-        </LinearGradient>
-        <View style={{ marginTop: 15 }}>
-          <ThemedText type="subtitle" style={{ marginBottom: 5 }}>
-            Temas
-          </ThemedText>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {keywords?.map((item) => (
-              <CategoryItem
-                key={item._id}
-                label={item.value}
-                containerStyle={{ marginRight: 10 }}
-              />
-            ))}
-          </ScrollView>
-        </View>
-      </View>
-    );
-  };
 
-  const renderItem = ({ item }: { item: IPost }) => {
-    return (
-      <TouchableOpacity
-        style={{
-          height: "auto",
-          borderWidth: 1,
-          borderColor: "rgba(89, 105, 140, 0.7)",
-          borderRadius: 7,
-          paddingHorizontal: 15,
-          paddingTop: 20,
-          marginTop: 20,
-        }}
-        onPress={() => {
-          router.navigate({
-            pathname: "/(drawer)/post/postDetail",
-            params: {
-              postId: item._id,
-            },
-          });
-        }}
-      >
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-          }}
-        >
-          <View
-            style={{
-              backgroundColor: "rgba(240, 90, 126, 0.1)",
-              height: 40,
-              width: 40,
-              justifyContent: "center",
-              alignItems: "center",
-              borderRadius: 5,
-              position: "absolute",
-            }}
-          >
-            <IconMessage width={25} height={25} />
-          </View>
-          <ThemedText
-            style={{
-              alignSelf: "center",
-              marginLeft: 60,
-              width: "70%",
-            }}
-            type="subtitle"
-            numberOfLines={1}
-          >
-            {item.title}
-          </ThemedText>
-        </View>
-        <View style={{ marginTop: 10 }}>
-          <ThemedText style={{ color: appColors.grayText }} numberOfLines={5}>
-            {item.content}
-          </ThemedText>
-        </View>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {item.keywords?.map((keyword) => (
-            <CategoryItem
-              key={keyword}
-              label={keyword}
-              containerStyle={{
-                height: 20,
-                marginRight: 5,
-                marginTop: 10,
-              }}
-              textStyle={{ fontSize: 12, lineHeight: 16 }}
-            />
-          ))}
-        </ScrollView>
-        <View
-          style={{
-            height: 1,
-            backgroundColor: "rgba(89, 105, 140, 0.2)",
-            width: "100%",
-            marginTop: 15,
-          }}
-        />
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-            paddingVertical: 10,
-          }}
-        >
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <UserCircle height={17} width={17} />
-            <ThemedText
-              style={{
-                marginLeft: 5,
-                color: appColors.grayText,
-                textDecorationLine: "underline",
-                fontSize: 12,
-              }}
-            >
-              {item.idUserCreator?.nickName}
-            </ThemedText>
-          </View>
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <IconClock height={17} width={17} />
-              <ThemedText
-                style={{
-                  color: appColors.grayText,
-                  fontSize: 12,
-                  marginLeft: 2,
-                }}
-              >
-                {dayjs(item.createdAt).fromNow(true)}
-              </ThemedText>
-            </View>
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                marginLeft: 15,
-              }}
-            >
-              <IconComment height={17} width={17} />
-              <ThemedText
-                style={{
-                  color: appColors.grayText,
-                  fontSize: 12,
-                  marginLeft: 2,
-                }}
-              >
-                {item.comments?.length || 0}
-              </ThemedText>
-            </View>
-          </View>
-        </View>
-      </TouchableOpacity>
+            {/* Loading overlay para búsquedas */}
+            {isSearching && displayData.length > 0 && (
+                <View
+                    style={{
+                        position: "absolute",
+                        top: 70,
+                        right: 20,
+                        backgroundColor: appColors.primary,
+                        borderRadius: 20,
+                        padding: 8,
+                        flexDirection: "row",
+                        alignItems: "center",
+                    }}
+                >
+                    <ActivityIndicator size="small" color={appColors.white} />
+                    <ThemedText
+                        style={{
+                            color: appColors.white,
+                            fontSize: 12,
+                            marginLeft: 5,
+                        }}
+                    >
+                        Buscando...
+                    </ThemedText>
+                </View>
+            )}
+        </SafeView>
     );
-  };
-
-  return (
-    <SafeView topSafe bottomSafe>
-      <FlatList
-        contentContainerStyle={{ padding: 15 }}
-        ListHeaderComponent={headerList}
-        style={{ marginTop: 60 }}
-        renderItem={renderItem}
-        data={postsRequestingLists?.data}
-        keyExtractor={(item) => item.id.toString()}
-        onEndReached={({ distanceFromEnd }) => {
-          if (distanceFromEnd <= 0 && postsRequestingLists.data?.length > 0) {
-            if (
-              postsRequestingListStatus !== "loading" &&
-              postsRequestingListStatus !== "error" &&
-              currentPage < totalPages
-            ) {
-              setCurrentPage(currentPage + 1);
-            }
-          }
-        }}
-      />
-    </SafeView>
-  );
 }
-
-const styles = StyleSheet.create({});

@@ -2,7 +2,7 @@ import { Drawer } from "expo-router/drawer";
 import { router, usePathname } from "expo-router";
 import { View } from "react-native";
 import { Header } from "@/components/shared/Header";
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 import { appColors } from "@/constants/Colors";
 import { ThemedText } from "@/components/shared/ThemedText";
 import { useSelector } from "react-redux";
@@ -10,21 +10,29 @@ import { RootState } from "@/store/store";
 import ButtonThemed from "@/components/shared/ThemedButton";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { DrawerOptions } from "@/components/drawer/DrawerOptions";
+import { appHeaders, HeaderConfig } from "@/constants/headers";
+import { SearchProvider, useSearch } from "@/contexts/SearchContext";
 
-export default function Layout() {
+function DrawerLayout() {
     const safeAreaInsets = useSafeAreaInsets();
-
     const { userInfo } = useSelector((state: RootState) => state.onBoarding);
-
     const pathname = usePathname();
+    const [headerConfig, setHeaderConfig] = useState<HeaderConfig | null>(null);
 
-    const titleRef = useRef<string>(null);
+    // Usar el contexto de búsqueda
+    const { searchQuery, setSearchQuery } = useSearch();
 
     useEffect(() => {
-        console.log(pathname);
-        if (pathname === "/post/createPost") {
-            console.log("entroooooooo");
-            titleRef.current = "Crear publicación";
+        console.log(pathname, appHeaders[pathname as keyof typeof appHeaders]);
+        if (Object.prototype.hasOwnProperty.call(appHeaders, pathname)) {
+            setHeaderConfig(appHeaders[pathname as keyof typeof appHeaders]);
+        } else {
+            setHeaderConfig({
+                title: null,
+                showSearchBox: false,
+                showBackButton: false,
+                type: "hidden",
+            });
         }
     }, [pathname]);
 
@@ -133,9 +141,23 @@ export default function Layout() {
             screenOptions={{
                 header: (props) => {
                     console.log(props.options);
-                    return <Header title={titleRef.current} />;
+                    return (
+                        <Header
+                            headerConfig={headerConfig}
+                            searchQuery={searchQuery}
+                            onSearchChange={setSearchQuery}
+                        />
+                    );
                 },
             }}
-        ></Drawer>
+        />
+    );
+}
+
+export default function Layout() {
+    return (
+        <SearchProvider>
+            <DrawerLayout />
+        </SearchProvider>
     );
 }
