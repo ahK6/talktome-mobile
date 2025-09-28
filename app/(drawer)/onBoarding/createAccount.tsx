@@ -148,7 +148,7 @@ export default function CreateAccount() {
               alignSelf: "center",
               width: "90%",
             }}
-            text="Publicar"
+            text="Registrarme"
             onPress={handleSubmit(onSubmit)}
             loading={loading}
           />
