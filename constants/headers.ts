@@ -30,14 +30,20 @@ export const appHeaders: Record<string, HeaderConfig> = {
     showBackButton: false,
     type: 'search'
   },
+  "/testimonies": {
+    title: null,
+    showSearchBox: true,
+    showBackButton: false,
+    type: 'search'
+  },
   "/post/postDetail": {
-    title: "#",
+    title: "",
     showSearchBox: false,
     showBackButton: true,
     type: 'default'
   },
   "/post/makeComment": {
-    title: "#",
+    title: "",
     showSearchBox: false,
     showBackButton: true,
     type: 'default'

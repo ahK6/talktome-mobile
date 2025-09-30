@@ -14,41 +14,53 @@ interface HeaderProps {
   headerConfig: HeaderConfig | null;
   onSearchChange?: (query: string) => void;
   searchQuery?: string;
+  params?: Readonly<any> | undefined;
 }
 
 export const Header: React.FC<HeaderProps> = ({ 
   headerConfig, 
   onSearchChange,
-  searchQuery = ''
+  searchQuery = '',
+  params = {}
  }) => {
   const navigation = useNavigation();
   const pathname = usePathname();
 
-  const shouldShowBackButton = (): boolean => {
+  const displayTitle = params.name || headerConfig?.title;
+
+    const shouldShowBackButton = (): boolean => {
     const backRoutes: string[] = [
-      "/(drawer)/onBoarding/login",
-      "/(drawer)/onBoarding/createAccount", 
-      "/(drawer)/post/createPost",
-      "/(drawer)/post/postDetail",
-      "/(drawer)/post/makeComment"
+      "onBoarding/login",
+      "onBoarding/createAccount", 
+      "post/createPost",
+      "post/postDetail",
+      "post/makeComment",
     ];
     
-    return backRoutes.some(route => pathname.includes(route.split('/').pop() ?? ""));
+    return backRoutes.some(route => pathname.includes(route));
   };
-
+  
   const handleGoBack = (): void => {
-    // Para rutas específicas, usar navegación específica
     if (pathname.includes("createAccount")) {
       router.push("/(drawer)/onBoarding/login");
     } else if (pathname.includes("makeComment")) {
-      // Volver a postDetail manteniendo el parámetro postId
-      router.back();
+      const postId = params.postId;
+      const postName = params.name;
+      if (postId) {
+        router.navigate({
+          pathname: "/(drawer)/post/postDetail",
+          params: { postId: postId as string, name: postName as string }
+        });
+      } else {
+        router.navigate("/(drawer)/(tabs)");
+      }
+    } else if (pathname.includes("createPost") || pathname.includes("postDetail")) {
+      router.navigate("/(drawer)/(tabs)");
     } else {
-      // Para otras rutas, usar goBack normal
       if (navigation.canGoBack()) {
         navigation.goBack();
       } else {
-        router.push("/(drawer)/(tabs)");
+        router.navigate("/(drawer)/(tabs)");
       }
     }
   };
@@ -130,7 +142,11 @@ export const Header: React.FC<HeaderProps> = ({
             )}
           </View>
         ) : (
-          headerConfig?.title && <ThemedText>{headerConfig.title}</ThemedText>
+          displayTitle && (
+          <ThemedText
+            style={{ fontSize: 20 }}
+            type="title"
+          >{displayTitle}</ThemedText>)
         )}
       </View>
     </SafeView>

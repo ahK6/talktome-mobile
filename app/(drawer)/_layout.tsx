@@ -140,12 +140,12 @@ function DrawerLayout() {
             )}
             screenOptions={{
                 header: (props) => {
-                    console.log(props.options);
                     return (
                         <Header
                             headerConfig={headerConfig}
                             searchQuery={searchQuery}
                             onSearchChange={setSearchQuery}
+                            params={props.route.params}
                         />
                     );
                 },

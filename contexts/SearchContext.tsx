@@ -12,6 +12,7 @@ interface SearchContextType {
   isSearching: boolean;
   setSearchQuery: (query: string) => void;
   setSelectedKeywords: (keywords: string[]) => void;
+  setType: (type: PostTypes) => void;
   toggleKeyword: (keyword: string) => void;
   clearFilters: () => void;
   handleSearch: () => void;
@@ -28,6 +29,7 @@ export const SearchProvider: React.FC<SearchProviderProps> = ({ children }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedKeywords, setSelectedKeywords] = useState<string[]>([]);
   const [isSearching, setIsSearching] = useState(false);
+  const [type, setType] = useState(PostTypes.requesting); // Default type
 
   // Obtener el estado de búsqueda desde Redux
   const { searchStatus } = useSelector((state: RootState) => state.posts);
@@ -45,7 +47,7 @@ export const SearchProvider: React.FC<SearchProviderProps> = ({ children }) => {
             inputParams: {
               query: query.trim(),
               keywords,
-              type: PostTypes.requesting,
+              type,
               page: 1,
               limit: 20
             },
@@ -92,6 +94,7 @@ export const SearchProvider: React.FC<SearchProviderProps> = ({ children }) => {
     isSearching: isSearching || searchStatus === 'loading',
     setSearchQuery,
     setSelectedKeywords,
+    setType,
     toggleKeyword,
     clearFilters,
     handleSearch

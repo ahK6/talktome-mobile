@@ -10,15 +10,17 @@ import IconMessage from "@/assets/images/icons/iconMessages.svg";
 import UserCircle from "@/assets/images/icons/userCircle.svg";
 import IconClock from "@/assets/images/icons/iconClock.svg";
 import IconComment from "@/assets/images/icons/iconComment.svg";
+import IconMessageCheckSecondary from "@/assets/images/icons/iconMessageCheckSecondary.svg";
 import relativeTime from "dayjs/plugin/relativeTime";
 
 dayjs.extend(relativeTime);
 
 interface PostItemProps {
     item: IPost;
+    type?: 'help' | 'testimony';
 }
 
-export const PostItem: React.FC<PostItemProps> = ({ item }) => {
+export const PostItem: React.FC<PostItemProps> = ({ item, type }) => {
     return (
         <TouchableOpacity
             style={{
@@ -35,6 +37,7 @@ export const PostItem: React.FC<PostItemProps> = ({ item }) => {
                     pathname: "/(drawer)/post/postDetail",
                     params: {
                         postId: item._id,
+                        name: item.title,
                     },
                 });
             }}
@@ -47,7 +50,7 @@ export const PostItem: React.FC<PostItemProps> = ({ item }) => {
             >
                 <View
                     style={{
-                        backgroundColor: "rgba(240, 90, 126, 0.1)",
+                        backgroundColor: type === "help" ? "rgba(240, 90, 126, 0.1)" : "rgba(11, 132, 148, 0.1)",
                         height: 40,
                         width: 40,
                         justifyContent: "center",
@@ -56,7 +59,7 @@ export const PostItem: React.FC<PostItemProps> = ({ item }) => {
                         position: "absolute",
                     }}
                 >
-                    <IconMessage width={25} height={25} />
+                    {type === "help" ? <IconMessage width={25} height={25} /> : <IconMessageCheckSecondary width={25} height={25} />}
                 </View>
                 <ThemedText
                     style={{

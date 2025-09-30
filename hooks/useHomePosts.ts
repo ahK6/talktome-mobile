@@ -6,11 +6,17 @@ import { PostTypes } from '@/store/posts/posts.types';
 import { showToast } from '@/components/shared/notifications/toast';
 import { useSearch } from '@/contexts/SearchContext';
 
-export const useHomePosts = () => {
+interface IUseHomePostsProps {
+  type: PostTypes;
+}
+
+export const useHomePosts = ({type}: IUseHomePostsProps) => {
   const dispatch: AppDispatch = useDispatch();
   const { 
     postsRequestingLists, 
-    postsRequestingListStatus, 
+    postsRequestingListStatus,
+    postsHelpingLists,
+    postsHelpingListStatus,
     keywords,
     searchResults,
     searchStatus 
@@ -22,6 +28,7 @@ export const useHomePosts = () => {
     isSearchMode,
     isSearching,
     toggleKeyword,
+    setType,
     clearFilters,
     handleSearch
   } = useSearch();
@@ -35,18 +42,37 @@ export const useHomePosts = () => {
     if (isSearchMode) {
       return searchResults || [];
     }
-    return postsRequestingLists?.data || [];
-  }, [isSearchMode, searchResults, postsRequestingLists?.data]);
+    
+    // Seleccionar datos según el tipo
+    if (type === PostTypes.requesting) {
+      return postsRequestingLists?.data || [];
+    } else if (type === PostTypes.helping) {
+      return postsHelpingLists || [];
+    }
+    
+    return [];
+  }, [isSearchMode, searchResults, postsRequestingLists?.data, postsHelpingLists, type]);
 
   const displayStatus = useMemo(() => {
-    return isSearchMode ? searchStatus : postsRequestingListStatus;
-  }, [isSearchMode, searchStatus, postsRequestingListStatus]);
+    if (isSearchMode) {
+      return searchStatus;
+    }
+    
+    // Seleccionar status según el tipo
+    if (type === PostTypes.requesting) {
+      return postsRequestingListStatus;
+    } else if (type === PostTypes.helping) {
+      return postsHelpingListStatus;
+    }
+    
+    return 'idle';
+  }, [isSearchMode, searchStatus, postsRequestingListStatus, postsHelpingListStatus, type]);
 
   // Obtener posts iniciales
-  const getPostsRequestingLists = async () => {
+  const getPostsRequestingLists = async (type: PostTypes) => {
     const result = await dispatch(
       getPostsByType({
-        inputParams: { type: PostTypes.requesting, page: currentPage },
+        inputParams: { type, page: currentPage },
         shouldStoreOutputState: true,
       })
     ).unwrap();
@@ -56,7 +82,7 @@ export const useHomePosts = () => {
     }
   };
 
-  const onRefresh = async () => {
+  const onRefresh = async (type: PostTypes) => {
     setIsRefreshing(true);
     setCurrentPage(1);
     
@@ -66,7 +92,7 @@ export const useHomePosts = () => {
       } else {
         await dispatch(
           getPostsByType({
-            inputParams: { type: PostTypes.requesting, page: 1 },
+            inputParams: { type, page: 1 },
             shouldStoreOutputState: true,
           })
         ).unwrap();
@@ -112,16 +138,20 @@ export const useHomePosts = () => {
 
   useEffect(() => {
     if (!isSearchMode) {
-      getPostsRequestingLists();
+      getPostsRequestingLists(type);
     }
     getKeywords();
-  }, []);
+  }, [type]);
 
   useEffect(() => {
     if (currentPage > 1 && !isSearchMode) {
-      getPostsRequestingLists();
+      getPostsRequestingLists(type);
     }
-  }, [currentPage]);
+  }, [currentPage, type]);
+
+  useEffect(() => {
+    setType(type);
+  }, [type]);
 
   return {
     // Data

@@ -21,7 +21,7 @@ import { EmptyState } from "@/components/EmptyState";
 // Hooks
 import { useHomePosts } from "@/hooks/useHomePosts";
 
-export default function HomeScreen() {
+export default function TestimonyScreen() {
     const {
         displayData,
         keywords,
@@ -33,7 +33,7 @@ export default function HomeScreen() {
         clearFilters,
         onRefresh,
         handleLoadMore,
-    } = useHomePosts({type: PostTypes.requesting});
+    } = useHomePosts({type: PostTypes.helping});
 
     useFocusEffect(
         useCallback(() => {
@@ -46,7 +46,7 @@ export default function HomeScreen() {
     const headerList = useCallback(() => {
         return (
             <View>
-                <HomeHeader type="help" />
+                <HomeHeader type="testimony" />
                 <KeywordsFilter
                     keywords={keywords}
                     selectedKeywords={selectedKeywords}
@@ -73,7 +73,7 @@ export default function HomeScreen() {
     ]);
 
     const renderItem = useCallback(
-        ({ item }: { item: IPost }) => <PostItem type="help" item={item} />,
+        ({ item }: { item: IPost }) => <PostItem type="testimony" item={item} />,
         []
     );
 
@@ -102,7 +102,7 @@ export default function HomeScreen() {
                 refreshControl={
                     <RefreshControl
                         refreshing={isRefreshing}
-                        onRefresh={() => onRefresh(PostTypes.requesting)}
+                        onRefresh={() => onRefresh(PostTypes.helping)}
                         colors={[appColors.primary]}
                         tintColor={appColors.primary}
                     />
