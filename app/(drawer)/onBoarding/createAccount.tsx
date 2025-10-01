@@ -18,7 +18,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 export default function CreateAccount() {
   const dispatch: AppDispatch = useDispatch();
 
-  const { control, handleSubmit } = useForm({
+  const { control, handleSubmit, reset } = useForm({
     resolver: yupResolver(signUpValidation),
   });
 
@@ -57,6 +57,8 @@ export default function CreateAccount() {
       showToast("Cuenta creada", {
         type: "success",
       });
+
+      reset();
 
       router.navigate("/(drawer)");
     } catch (error: any) {

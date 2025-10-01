@@ -47,5 +47,11 @@ export const appHeaders: Record<string, HeaderConfig> = {
     showSearchBox: false,
     showBackButton: true,
     type: 'default'
-  }
+  },
+  "/myAccount/myAccount": {
+    title: null,
+    showSearchBox: false,
+    showBackButton: true,
+    type: 'default'
+  },
 };

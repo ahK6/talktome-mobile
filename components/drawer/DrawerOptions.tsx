@@ -13,6 +13,7 @@ import IconDocument from "@/assets/images/icons/iconDocument.svg";
 import IconLogOut from "@/assets/images/icons/logout.svg";
 import { View } from "react-native";
 import ButtonThemed from "../shared/ThemedButton";
+import { router } from "expo-router";
 
 export const DrawerOptions = () => {
     const dispatch: AppDispatch = useDispatch();
@@ -91,7 +92,9 @@ export const DrawerOptions = () => {
                             color={appColors.primary}
                         />
                     }
-                    onPress={() => console.log("Mi Cuenta pressed")}
+                    onPress={() =>
+                        router.navigate("/(drawer)/myAccount/myAccount")
+                    }
                     style={{
                         backgroundColor: appColors.white,
                         borderColor: appColors.white,

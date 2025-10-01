@@ -24,4 +24,5 @@ export interface IUserInfo {
 export interface IUserInformation {
   id: string;
   username: string;
+  email: string;
 }

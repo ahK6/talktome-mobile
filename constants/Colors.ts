@@ -7,6 +7,7 @@ const greenDark = "#2E6C37";
 const red = "#E8393A";
 const gray = "#52686D";
 const grayBorder = "#CED6DD";
+const lightGray = "#FAFCFF";
 const mutedText = "#6B6B6B";
 const overlay = "rgba(0,0,0,0.4)";
 const blue = "#125B9A";
@@ -65,5 +66,6 @@ export const appColors = {
   softRed,
   softBlue,
   lightBlue,
+  lightGray,
   grayText,
 };

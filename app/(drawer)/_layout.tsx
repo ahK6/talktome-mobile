@@ -23,7 +23,6 @@ function DrawerLayout() {
     const { searchQuery, setSearchQuery } = useSearch();
 
     useEffect(() => {
-        console.log(pathname, appHeaders[pathname as keyof typeof appHeaders]);
         if (Object.prototype.hasOwnProperty.call(appHeaders, pathname)) {
             setHeaderConfig(appHeaders[pathname as keyof typeof appHeaders]);
         } else {
