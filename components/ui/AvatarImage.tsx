@@ -5,32 +5,69 @@ import { ThemedText } from "../shared/ThemedText";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { useAvatarColor } from "@/hooks/useAvatarColor";
+import { LinearGradient } from "expo-linear-gradient";
+import { Feather } from "@expo/vector-icons";
 
-export const AvatarImage = () => {
+interface AvatarImageProps {
+    avatarSize?: number;
+}
+
+export const AvatarImage: React.FC<AvatarImageProps> = ({ avatarSize }) => {
     const { userInfo } = useSelector((state: RootState) => state.onBoarding);
     const { getColorByLetter } = useAvatarColor();
 
     const getFirstLetter = (): string => {
-        const username = userInfo?.userInformation?.username || "U";
-        return username.charAt(0).toUpperCase();
+        const username = userInfo?.userInformation?.username;
+        return username ? username.charAt(0).toUpperCase() : "";
     };
 
     const firstLetter = getFirstLetter();
-    const avatarColor = getColorByLetter(firstLetter);
+    const avatarColor = getColorByLetter(firstLetter || "G");
+    const isLoggedIn = !!userInfo?.userInformation?.username;
+
+    if (!isLoggedIn) {
+        return (
+            <View
+                style={{
+                    width: avatarSize || 100,
+                    height: avatarSize || 100,
+                    borderRadius: 50,
+                    overflow: "hidden",
+                }}
+            >
+                <LinearGradient
+                    colors={["#95a5a6", "#bdc3c7"]}
+                    style={{
+                        width: "100%",
+                        height: "100%",
+                        alignItems: "center",
+                        justifyContent: "center",
+                    }}
+                >
+                    <Feather
+                        name="user"
+                        size={avatarSize ? avatarSize / 2.5 : 40}
+                        color="#FFFFFF"
+                    />
+                </LinearGradient>
+            </View>
+        );
+    }
+
     return (
         <View
             style={{
                 backgroundColor: appColors.grayText,
-                width: 100,
-                height: 100,
+                width: avatarSize || 100,
+                height: avatarSize || 100,
                 borderRadius: 50,
             }}
         >
             <View
                 style={{
                     backgroundColor: appColors.lightGray,
-                    width: 90,
-                    height: 90,
+                    width: avatarSize ? avatarSize - 10 : 90,
+                    height: avatarSize ? avatarSize - 10 : 90,
                     borderRadius: 45,
                     margin: 5,
                     alignItems: "center",
@@ -40,8 +77,8 @@ export const AvatarImage = () => {
                 <View
                     style={{
                         backgroundColor: avatarColor,
-                        width: 80,
-                        height: 80,
+                        width: avatarSize ? avatarSize - 20 : 80,
+                        height: avatarSize ? avatarSize - 20 : 80,
                         borderRadius: 45,
                         alignItems: "center",
                         justifyContent: "center",
@@ -49,8 +86,8 @@ export const AvatarImage = () => {
                 >
                     <ThemedText
                         style={{
-                            fontSize: 40,
-                            lineHeight: 40,
+                            fontSize: avatarSize ? avatarSize / 2.5 : 40,
+                            lineHeight: avatarSize ? avatarSize / 2.5 : 40,
                             fontWeight: "bold",
                             color: "#FFFFFF",
                             textShadowColor: "rgba(0, 0, 0, 0.3)",

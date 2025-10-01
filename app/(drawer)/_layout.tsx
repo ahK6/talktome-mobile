@@ -12,6 +12,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { DrawerOptions } from "@/components/drawer/DrawerOptions";
 import { appHeaders, HeaderConfig } from "@/constants/headers";
 import { SearchProvider, useSearch } from "@/contexts/SearchContext";
+import { AvatarImage } from "@/components/ui/AvatarImage";
 
 function DrawerLayout() {
     const safeAreaInsets = useSafeAreaInsets();
@@ -53,27 +54,7 @@ function DrawerLayout() {
                             borderBottomColor: appColors.gray,
                         }}
                     >
-                        <View
-                            style={{
-                                width: 80,
-                                height: 80,
-                                borderRadius: 50,
-                                borderWidth: 1,
-                                borderColor: "black",
-                                justifyContent: "center",
-                                alignItems: "center",
-                            }}
-                        >
-                            <View
-                                style={{
-                                    width: 70,
-                                    height: 70,
-                                    borderRadius: 50,
-                                    backgroundColor: appColors.softGray,
-                                }}
-                            />
-                        </View>
-
+                        <AvatarImage avatarSize={80} />
                         <View>
                             <ThemedText
                                 type="subtitle"

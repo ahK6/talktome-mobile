@@ -30,7 +30,7 @@ export const DrawerOptions = () => {
                 <ButtonThemed
                     text="Solicitudes de ayuda"
                     iconLeft={<IconMessage width={25} height={25} />}
-                    onPress={() => console.log("Solicitudes de ayuda pressed")}
+                    onPress={() => router.navigate("/(drawer)")}
                     style={{
                         backgroundColor: appColors.white,
                         borderColor: appColors.white,
@@ -45,7 +45,7 @@ export const DrawerOptions = () => {
                 <ButtonThemed
                     text="Testimonios"
                     iconLeft={<IconMessageCheck width={25} height={25} />}
-                    onPress={() => console.log("Testimonios pressed")}
+                    onPress={() => router.navigate("/(drawer)/testimonies")}
                     style={{
                         backgroundColor: appColors.white,
                         borderColor: appColors.white,

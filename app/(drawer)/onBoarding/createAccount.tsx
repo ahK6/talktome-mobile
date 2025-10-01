@@ -9,7 +9,7 @@ import { signUpValidation } from "@/utils/axios/validators/onBoarding";
 import { ICreateAccountParams } from "@/store/onBoarding/onBoarding.types";
 import { createAccount } from "@/store/onBoarding/onBoarding.actions";
 import { showToast } from "@/components/shared/notifications/toast";
-import { router } from "expo-router";
+import { useNavigation } from "expo-router";
 import TextInputThemed from "@/components/shared/ThemedInput";
 import { ThemedText } from "@/components/shared/ThemedText";
 import ButtonThemed from "@/components/shared/ThemedButton";
@@ -17,6 +17,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 
 export default function CreateAccount() {
   const dispatch: AppDispatch = useDispatch();
+  const navigation = useNavigation();
 
   const { control, handleSubmit, reset } = useForm({
     resolver: yupResolver(signUpValidation),
@@ -60,7 +61,7 @@ export default function CreateAccount() {
 
       reset();
 
-      router.navigate("/(drawer)");
+      navigation.goBack();
     } catch (error: any) {
       showToast(error.response?.data?.error ?? "Error al crear la cuenta", {
         type: "danger",

@@ -3,7 +3,7 @@ import { ThemedText } from "@/components/shared/ThemedText";
 import { AvatarImage } from "@/components/ui/AvatarImage";
 import { appColors } from "@/constants/Colors";
 import { RootState } from "@/store/store";
-import React from "react";
+import React, { useCallback } from "react";
 import { ScrollView, TouchableOpacity, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useSelector } from "react-redux";
@@ -12,10 +12,26 @@ import IconEdit from "@/assets/images/icons/iconEdit.svg";
 import IconSettings from "@/assets/images/icons/iconSettings.svg";
 import { ThemeSwitch } from "@/components/shared/ThemeSwitch";
 import { useConfig } from "@/hooks/useConfig";
+import { router, useFocusEffect } from "expo-router";
 
 const MyAccount = () => {
     const { userInfo } = useSelector((state: RootState) => state.onBoarding);
-    const { notifications, contactInfoVisible, updateSetting } = useConfig();
+    const { notifications, contactInfoVisible, updateSetting, refreshConfig } =
+        useConfig();
+
+    useFocusEffect(
+        useCallback(() => {
+            if (!userInfo?.token) {
+                router.replace("/(drawer)/");
+            }
+        }, [userInfo])
+    );
+
+    useFocusEffect(
+        useCallback(() => {
+            refreshConfig();
+        }, [])
+    );
 
     return (
         <SafeView topSafe bottomSafe>
@@ -43,7 +59,7 @@ const MyAccount = () => {
                                 gap: 15,
                             }}
                         >
-                            <AvatarImage />
+                            <AvatarImage avatarSize={100} />
                             <View>
                                 <ThemedText
                                     style={{
