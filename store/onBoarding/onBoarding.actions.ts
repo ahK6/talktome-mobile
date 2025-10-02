@@ -66,3 +66,13 @@ export const updateUserInfo = createAsyncThunkWithErrorHandling(
     return data;
   }
 );
+
+export const validateUserToken = createAsyncThunkWithErrorHandling(
+  "auth/validateToken",
+  async () => {
+    const { data } = await privateAxiosApi.get(`${apiUrl}/users/validate-token`);
+    console.log("Token validation response:", {data});
+    
+    return data;
+  }
+);
