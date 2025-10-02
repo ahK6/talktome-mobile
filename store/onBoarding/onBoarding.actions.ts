@@ -1,7 +1,7 @@
-import { anonAxiosApi } from "@/utils/axios/axiosInstances";
+import { anonAxiosApi, privateAxiosApi } from "@/utils/axios/axiosInstances";
 import { createAsyncThunkWithErrorHandling } from "@/utils/middlewares/createAsyncThunkWithErrorHandling";
 import { apiUrl } from "@/constants/urls";
-import { ICreateAccountParams, ILoginParams } from "./onBoarding.types";
+import { ICreateAccountParams, ILoginParams, IUpdateUserInfoRequest, IUpdateUserInfoResponse } from "./onBoarding.types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const createAccount = createAsyncThunkWithErrorHandling(
@@ -49,6 +49,20 @@ export const login = createAsyncThunkWithErrorHandling(
 
     AsyncStorage.setItem("accessToken", data.token);
 
+    return data;
+  }
+);
+
+export const updateUserInfo = createAsyncThunkWithErrorHandling(
+  "onBoarding/updateUserInfo",
+  async ({
+    inputParams,
+    shouldStoreOutputState = true,
+  }: IUpdateUserInfoRequest): Promise<IUpdateUserInfoResponse> => {
+    const { data } = await privateAxiosApi.put(
+      `${apiUrl}/users/user-update`,
+      inputParams
+    );
     return data;
   }
 );

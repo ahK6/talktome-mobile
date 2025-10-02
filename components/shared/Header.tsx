@@ -35,6 +35,8 @@ export const Header: React.FC<HeaderProps> = ({
       "post/createPost",
       "post/postDetail",
       "post/makeComment",
+      "myAccount/myInformation",
+      "myAccount/changeMyPassword"
     ];
     
     return backRoutes.some(route => pathname.includes(route));
@@ -56,6 +58,8 @@ export const Header: React.FC<HeaderProps> = ({
       }
     } else if (pathname.includes("createPost") || pathname.includes("postDetail")) {
       router.navigate("/(drawer)/(tabs)");
+    } else if (pathname.includes("changeMyPassword") || pathname.includes("myInformation")) {
+      router.navigate("/(drawer)/myAccount/myAccount");
     } else {
       if (navigation.canGoBack()) {
         navigation.goBack();

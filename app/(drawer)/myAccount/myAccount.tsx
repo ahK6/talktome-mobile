@@ -108,13 +108,18 @@ const MyAccount = () => {
                             >
                                 Mi información
                             </ThemedText>
-                            <IconEdit
+                            <TouchableOpacity
                                 style={{
                                     marginLeft: "auto",
                                 }}
-                                width={25}
-                                height={25}
-                            />
+                                onPress={() => {
+                                    router.navigate(
+                                        "/(drawer)/myAccount/myInformation"
+                                    );
+                                }}
+                            >
+                                <IconEdit width={25} height={25} />
+                            </TouchableOpacity>
                         </View>
                         <View
                             style={{
@@ -189,7 +194,13 @@ const MyAccount = () => {
                                 >
                                     Contraseña
                                 </ThemedText>
-                                <TouchableOpacity onPress={() => {}}>
+                                <TouchableOpacity
+                                    onPress={() =>
+                                        router.navigate(
+                                            "/(drawer)/myAccount/changeMyPassword"
+                                        )
+                                    }
+                                >
                                     <ThemedText
                                         style={{
                                             fontSize: 16,
