@@ -6,6 +6,8 @@ import {
   IPostDetail,
   IPostParams,
   IPostRequestingParams,
+  ISearchPostsParams,
+  ISearchPostsResponse,
   PostTypes,
 } from "./posts.types";
 
@@ -105,5 +107,28 @@ export const postComment = createAsyncThunkWithErrorHandling(
     );
 
     return data;
+  }
+);
+
+export const searchPosts = createAsyncThunkWithErrorHandling(
+  "posts/searchPosts",
+  async ({
+    inputParams: { query, keywords, page = 1, limit = 10, type = 'requesting' },
+  }: IActionInputType<ISearchPostsParams>) => {
+    const params = new URLSearchParams();
+    
+    if (query) params.append("q", query);
+    if (keywords && keywords.length > 0) {
+      params.append("keywords", keywords.join(','));
+    }
+    params.append("page", page.toString());
+    params.append("limit", limit.toString());
+    params.append("type", type);
+
+    const { data } = await anonAxiosApi.get(
+      `${apiUrl}/posts/search?${params.toString()}`
+    );
+
+    return data as ISearchPostsResponse;
   }
 );

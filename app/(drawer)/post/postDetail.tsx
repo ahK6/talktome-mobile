@@ -19,7 +19,7 @@ import { AppDispatch, RootState } from "@/store/store";
 import { useIsFocused } from "@react-navigation/native";
 import PagerView from "react-native-pager-view";
 import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import {
   FlatList,
   ScrollView,
@@ -27,6 +27,7 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  ActivityIndicator,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import dayjs from "dayjs";
@@ -43,21 +44,83 @@ const PostDetail = () => {
   const commentInputRef = useRef<TextInput>(null);
 
   const dispatch: AppDispatch = useDispatch();
+  const { userInfo } = useSelector((state: RootState) => state.onBoarding);
 
-  const [postDetailInfo, setPostDetailInfo] = useState<IPostDetail | null>(
-    null
-  );
+  const [postDetailInfo, setPostDetailInfo] = useState<IPostDetail | null>(null);
   const [postCommentsList, setPostCommentsList] = useState<IComment[]>([]);
   const [loading, setLoading] = useState(false);
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+  const [currentPostId, setCurrentPostId] = useState<string | null>(null);
+
+  useEffect(() => {
+    return () => {
+      // Cleanup cuando el componente se desmonta
+      cleanupPostData();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isVisible) {
+      // Limpiar datos cuando la pantalla pierde foco
+      cleanupPostData();
+    }
+  }, [isVisible]);
+
+  const cleanupPostData = () => {
+    setPostDetailInfo(null);
+    setPostCommentsList([]);
+    setCurrentPostId(null);
+    setLoading(false);
+    setIsCheckingAuth(true);
+  };
+
+  // Verificar autenticación cuando la pantalla recibe foco
+  useFocusEffect(
+    useCallback(() => {
+      checkAuthAndLoadData();
+    }, [userInfo?.token, params.postId])
+  );
+
+  const checkAuthAndLoadData = async () => {
+    // Verificar si hay un postId válido
+    if (!params.postId) {
+      showToast("Especifica un ID de publicación", { type: "danger" });
+      router.back();
+      return;
+    }
+
+    if (currentPostId && currentPostId !== params.postId) {
+      cleanupPostData();
+    }
+
+    setCurrentPostId(params.postId as string);
+
+    // Si está autenticado, cargar datos
+    setIsCheckingAuth(false);
+    if (isVisible) {
+      await Promise.all([getPostDetail(), getPostComments()]);
+    }
+  };
 
   const getPostDetail = async () => {
-    setLoading(true);
+    if (!postDetailInfo || currentPostId !== params.postId) {
+      setLoading(true);
+    }
     try {
       const res = await dispatch(
         postDetail({ inputParams: { idPost: params.postId as string } })
       ).unwrap();
       setPostDetailInfo(res.data);
     } catch (error: any) {
+      // Verificar si el error es de autenticación
+      if (error.response?.status === 401) {
+        showToast("Tu sesión ha expirado. Inicia sesión nuevamente", {
+          type: "danger",
+        });
+        router.replace("/(drawer)/onBoarding/login");
+        return;
+      }
+      
       showToast(
         error.response?.data?.error ?? "Error al obtener los detalles",
         {
@@ -71,38 +134,74 @@ const PostDetail = () => {
   };
 
   const getPostComments = async () => {
-    setLoading(true);
     try {
       const res = await dispatch(
         getcommentsByPostId({
           inputParams: { idPost: params.postId as string },
         })
       ).unwrap();
-      setPostCommentsList(res.data);
+      if (currentPostId === params.postId) {
+        setPostCommentsList(res.data);
+      }
     } catch (error: any) {
+      // Verificar si el error es de autenticación
+      if (error.response?.status === 401) {
+        showToast("Tu sesión ha expirado. Inicia sesión nuevamente", {
+          type: "danger",
+        });
+        router.replace("/(drawer)/onBoarding/login");
+        return;
+      }
+      
       showToast(
-        error.response?.data?.error ?? "Error al obtener los detalles",
+        error.response?.data?.error ?? "Error al obtener los comentarios",
         {
           type: "danger",
         }
       );
-      router.back();
-    } finally {
-      setLoading(false);
     }
   };
 
-  useEffect(() => {
-    if (isVisible) {
-      if (params.postId) {
-        getPostDetail();
-        getPostComments();
-      } else {
-        showToast("Especifica un ID de publicación", { type: "danger" });
-        router.back();
-      }
+  const handleCommentPress = () => {
+    // Verificar autenticación antes de ir a comentar
+    if (!userInfo?.token) {
+      showToast("Debes iniciar sesión para comentar", {
+        type: "warning",
+      });
+      router.replace("/(drawer)/onBoarding/login");
+      return;
     }
-  }, [isVisible]);
+    router.push({
+      pathname: "/(drawer)/post/makeComment",
+      params: {
+        postId: params.postId as string,
+        name: params.name as string,
+      },
+    });
+  };
+
+  // Mostrar loading mientras verifica autenticación
+  if (isCheckingAuth || !postDetailInfo || currentPostId !== params.postId) {
+    return (
+      <SafeView topSafe bottomSafe>
+        <View style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+          paddingHorizontal: 20,
+        }}>
+          <ActivityIndicator size="large" color={appColors.primary} />
+          <ThemedText style={{
+            marginTop: 20,
+            textAlign: "center",
+            color: appColors.grayText,
+          }}>
+            Cargando información...
+          </ThemedText>
+        </View>
+      </SafeView>
+    );
+  }
 
   const renderItem = ({ item, index }: { item: IComment; index: number }) => {
     return (
@@ -116,7 +215,7 @@ const PostDetail = () => {
             }}
           >
             <ThemedText type="subtitle" style={{ color: appColors.text }}>
-              Comentarios
+              Comentarios ({postCommentsList.length})
             </ThemedText>
           </View>
         )}
@@ -170,6 +269,32 @@ const PostDetail = () => {
       </>
     );
   };
+
+  const renderEmptyComments = () => (
+    <View style={{
+      alignItems: 'center',
+      paddingVertical: 40,
+      marginTop: 30,
+    }}>
+      <IconComment width={40} height={40} />
+      <ThemedText style={{
+        color: appColors.grayText,
+        textAlign: 'center',
+        marginTop: 15,
+        fontSize: 16,
+      }}>
+        Sé el primero en comentar
+      </ThemedText>
+      <ThemedText style={{
+        color: appColors.grayText,
+        textAlign: 'center',
+        marginTop: 5,
+        fontSize: 14,
+      }}>
+        Comparte tu experiencia y ayuda a otros
+      </ThemedText>
+    </View>
+  );
 
   return (
     <SafeView topSafe bottomSafe>
@@ -239,30 +364,27 @@ const PostDetail = () => {
           }
           data={postCommentsList}
           renderItem={renderItem}
-          keyExtractor={(item) => item._id} // 🔹 importante para evitar render duplicado
+          keyExtractor={(item) => item._id}
+          ListEmptyComponent={renderEmptyComments}
           contentContainerStyle={{
             paddingHorizontal: 15,
             paddingBottom: 100,
             marginTop: 30,
           }}
+          showsVerticalScrollIndicator={false}
         />
+        
         <ButtonThemed
-          onPress={() => {
-            router.push({
-              pathname: "/(drawer)/post/makeComment",
-              params: {
-                postId: params.postId as string,
-              },
-            });
-          }}
+          onPress={handleCommentPress}
           style={{
             position: "absolute",
             bottom: 25,
             alignSelf: "center",
             width: "90%",
           }}
-          text="Responder"
+          text={postCommentsList.length > 0 ? "Agregar comentario" : "Comentar"}
           loading={loading}
+          disabled={loading}
         />
       </View>
     </SafeView>

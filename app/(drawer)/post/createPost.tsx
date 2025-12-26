@@ -9,11 +9,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import { postRequest } from "@/store/posts/posts.actions";
 import { showToast } from "@/components/shared/notifications/toast";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
+import { PostTypes } from "@/store/posts/posts.types";
 
 export default function CreatePost() {
   const dispatch: AppDispatch = useDispatch();
-
+  const params = useLocalSearchParams();
+  
   const { keywords } = useSelector((state: RootState) => state.posts);
 
   const [open, setOpen] = useState(false);
@@ -26,8 +28,8 @@ export default function CreatePost() {
   const createPostHandler = async () => {
     try {
       if (!title || !content || !values.length) {
-        if (values.length < 2) {
-          return showToast("Debes seleccionar al menos dos categorías", {
+        if (values.length < 1) {
+          return showToast("Debes seleccionar al menos una categoría", {
             type: "danger",
           });
         }
@@ -38,14 +40,14 @@ export default function CreatePost() {
       }
       setLoading(true);
       await dispatch(
-        postRequest({ inputParams: { title, content, keywords: values } })
+        postRequest({ inputParams: { title, content, keywords: values, type: params.type === "help" ? PostTypes.requesting : PostTypes.helping } })
       ).unwrap();
       setTitle("");
       setContent("");
       setValues([]);
       setOpen(false);
       showToast("Publicación creado con éxito", { type: "success" });
-      router.navigate("/(drawer)/");
+      router.back();
     } catch (error: any) {
       showToast(
         error.response?.data?.error ?? "Error al crear la publicación",

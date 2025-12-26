@@ -7,6 +7,10 @@ export interface IPosts {
   postsHelpingListStatus: AsyncActionStatus;
   keywords: IKeywords[];
   keywordsStatus: AsyncActionStatus;
+  searchResults: IPost[];
+  searchPagination: ISearchPostsResponse['pagination'] | null;
+  searchFilters: ISearchPostsResponse['filters'] | null;
+  searchStatus: AsyncActionStatus;
 }
 
 export interface IKeywords {
@@ -82,3 +86,27 @@ export type IComment = {
   updatedAt: Date;
   __v: number;
 };
+
+export interface ISearchPostsParams {
+  query?: string;
+  keywords?: string[];
+  page?: number;
+  limit?: number;
+  type?: 'requesting' | 'helping';
+}
+
+export interface ISearchPostsResponse {
+  data: IPost[];
+  pagination: {
+    currentPage: number;
+    totalPages: number;
+    total: number;
+    hasNextPage: boolean;
+    hasPrevPage: boolean;
+  };
+  filters: {
+    query: string;
+    keywords: string[];
+    type: string;
+  };
+}

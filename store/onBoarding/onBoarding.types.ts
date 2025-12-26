@@ -24,4 +24,24 @@ export interface IUserInfo {
 export interface IUserInformation {
   id: string;
   username: string;
+  email: string;
+}
+
+export interface IUpdateUserInfoRequest {
+  inputParams: {
+    nickName?: string;
+    email?: string;
+    password?: string;
+  };
+  shouldStoreOutputState?: boolean;
+}
+
+export interface IUpdateUserInfoResponse {
+  success: boolean;
+  data: {
+    id: string;
+    username: string;
+    email: string;
+  };
+  message: string;
 }
