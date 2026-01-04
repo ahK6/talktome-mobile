@@ -148,8 +148,9 @@ export const Header: React.FC<HeaderProps> = ({
         ) : (
           displayTitle && (
           <ThemedText
-            style={{ fontSize: 20 }}
+            style={{ fontSize: 20, marginLeft: 15 }}
             type="title"
+            numberOfLines={1}
           >{displayTitle}</ThemedText>)
         )}
       </View>

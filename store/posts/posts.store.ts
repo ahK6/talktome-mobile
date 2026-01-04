@@ -1,6 +1,6 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AsyncActionStatus } from "@/shared/types/enums.types";
-import { IPosts, PostTypes } from "./posts.types";
+import { IPosts, ISearchByKeywordParams, PostTypes } from "./posts.types";
 import { getAllKeywords, getPostsByType, searchPosts } from "./posts.actions";
 import { getUpdatedPosts } from "./posts.helpers";
 
@@ -15,6 +15,8 @@ const initialState: IPosts = {
   searchPagination: null,
   searchFilters: null,
   searchStatus: AsyncActionStatus.idle,
+  selectedKeyword: null,
+  activeTab: 0,
 };
 
 const postsSlice = createSlice({
@@ -26,12 +28,19 @@ const postsSlice = createSlice({
       state.searchPagination = null;
       state.searchFilters = null;
       state.searchStatus = AsyncActionStatus.idle;
+      state.selectedKeyword = null;
     },
     appendSearchResults: (state, action) => {
       // Para paginación infinita
       state.searchResults = [...state.searchResults, ...action.payload.data];
       state.searchPagination = action.payload.pagination;
-    }
+    },
+    setSelectedKeyword: (state, action: PayloadAction<ISearchByKeywordParams>) => {
+      state.selectedKeyword = action.payload;
+    },
+    setActiveTab: (state, action: PayloadAction<number>) => {
+      state.activeTab = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -119,7 +128,7 @@ const postsSlice = createSlice({
   },
 });
 
-export const {clearSearchResults, appendSearchResults} = postsSlice.actions;
+export const {clearSearchResults, appendSearchResults, setSelectedKeyword, setActiveTab} = postsSlice.actions;
 
 const postsReducer = postsSlice.reducer;
 export default postsReducer;

@@ -26,6 +26,7 @@ export default function HomeScreen() {
         displayData,
         keywords,
         isRefreshing,
+        selectedKeyword,
         selectedKeywords,
         isSearchMode,
         isSearching,
@@ -33,14 +34,25 @@ export default function HomeScreen() {
         clearFilters,
         onRefresh,
         handleLoadMore,
-    } = useHomePosts({type: PostTypes.requesting});
+    } = useHomePosts({ type: PostTypes.requesting });
 
     useFocusEffect(
         useCallback(() => {
             return () => {
                 clearFilters();
-            }
+            };
         }, [])
+    );
+
+    useFocusEffect(
+        useCallback(() => {
+            if (
+                selectedKeyword &&
+                selectedKeyword.type === PostTypes.requesting
+            ) {
+                toggleKeyword(selectedKeyword.keyword);
+            }
+        }, [selectedKeyword])
     );
 
     const headerList = useCallback(() => {

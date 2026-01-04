@@ -16,6 +16,7 @@ interface HomeHeaderProps {
 
 export const HomeHeader: React.FC<HomeHeaderProps> = ({type}) => {
     const { userInfo } = useSelector((state: RootState) => state.onBoarding);
+    const [containerHeight, setContainerHeight] = React.useState<number>(0);
 
     const getMessage = () => {
         if (userInfo?.token) {
@@ -45,7 +46,6 @@ export const HomeHeader: React.FC<HomeHeaderProps> = ({type}) => {
                     "rgba(11, 132, 148, 0.25)",
                 ]}
                 style={{
-                    height: userInfo?.token && type === "help" ? 150 : 170,
                     borderWidth: 0.5,
                     borderColor: type === "help" ? appColors.primary : appColors.secondary,
                     borderRadius: 5,
@@ -58,12 +58,12 @@ export const HomeHeader: React.FC<HomeHeaderProps> = ({type}) => {
                     }}
                 >
                     {type === "help" ? (
-                        <Hands height={userInfo?.token ? 150 : 170} width={60} />
+                        <Hands height={containerHeight || (userInfo?.token ? 150 : 170)} width={60} />
                     ) : (
                         <HandsSecondary height={170} width={60} />
                     )}
                 </View>
-                <View style={{ width: "75%", padding: 20 }}>
+                <View style={{ width: "75%", padding: 20 }} onLayout={(event) => setContainerHeight(event.nativeEvent.layout.height)}>
                     <ThemedText type="default" style={{ fontSize: 20 }}>
                         {getMessage()}
                     </ThemedText>

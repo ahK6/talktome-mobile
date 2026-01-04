@@ -54,30 +54,27 @@ export const KeywordsFilter: React.FC<KeywordsFilterProps> = ({
                 {keywords?.map((item) => {
                     const isSelected = selectedKeywords.includes(item.value);
                     return (
-                        <TouchableOpacity
+                        <CategoryItem
                             key={item._id}
+                            label={item.value}
+                            containerStyle={{
+                                marginRight: 10,
+                                backgroundColor: isSelected
+                                    ? appColors.primary
+                                    : appColors.softGray,
+                                borderColor: isSelected
+                                    ? appColors.primary
+                                    : appColors.softGray,
+                                borderWidth: 1,
+                            }}
+                            textStyle={{
+                                color: isSelected
+                                    ? appColors.white
+                                    : appColors.text,
+                                fontWeight: isSelected ? "bold" : "normal",
+                            }}
                             onPress={() => onToggleKeyword(item.value)}
-                        >
-                            <CategoryItem
-                                label={item.value}
-                                containerStyle={{
-                                    marginRight: 10,
-                                    backgroundColor: isSelected
-                                        ? appColors.primary
-                                        : appColors.softGray,
-                                    borderColor: isSelected
-                                        ? appColors.primary
-                                        : appColors.softGray,
-                                    borderWidth: 1,
-                                }}
-                                textStyle={{
-                                    color: isSelected
-                                        ? appColors.white
-                                        : appColors.text,
-                                    fontWeight: isSelected ? "bold" : "normal",
-                                }}
-                            />
-                        </TouchableOpacity>
+                        />
                     );
                 })}
             </ScrollView>

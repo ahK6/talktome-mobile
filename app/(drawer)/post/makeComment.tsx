@@ -21,6 +21,7 @@ const CommentInput: React.FC = () => {
 
   const [commentText, setCommentText] = useState("");
   const [loading, setLoading] = useState(false);
+  const [inputHeight, setInputHeight] = useState(100);
 
   const makeComment = async () => {
     setLoading(true);
@@ -75,16 +76,22 @@ const CommentInput: React.FC = () => {
             inputStyle={{
               borderRadius: 0,
               borderWidth: 0,
-              height: "80%",
+              height: inputHeight,
+              maxHeight: "80%",
               textAlignVertical: "top",
+              marginHorizontal: 15,
             }}
             numberOfLines={50}
             multiline={true}
+            onContentSizeChange={(event) => {
+              setInputHeight(event.nativeEvent.contentSize.height + 20);
+            }}
           />
           <ButtonThemed
             onPress={makeComment}
             style={{
-              bottom: 0,
+              position: "absolute",
+              bottom: 10,
               alignSelf: "center",
               width: "90%",
             }}
