@@ -26,6 +26,7 @@ export default function TestimonyScreen() {
         displayData,
         keywords,
         isRefreshing,
+        selectedKeyword,
         selectedKeywords,
         isSearchMode,
         isSearching,
@@ -33,14 +34,22 @@ export default function TestimonyScreen() {
         clearFilters,
         onRefresh,
         handleLoadMore,
-    } = useHomePosts({type: PostTypes.helping});
+    } = useHomePosts({ type: PostTypes.helping });
 
     useFocusEffect(
         useCallback(() => {
             return () => {
                 clearFilters();
-            }
+            };
         }, [])
+    );
+
+    useFocusEffect(
+        useCallback(() => {
+            if (selectedKeyword && selectedKeyword.type === PostTypes.helping) {
+                toggleKeyword(selectedKeyword.keyword);
+            }
+        }, [selectedKeyword])
     );
 
     const headerList = useCallback(() => {
@@ -73,7 +82,9 @@ export default function TestimonyScreen() {
     ]);
 
     const renderItem = useCallback(
-        ({ item }: { item: IPost }) => <PostItem type="testimony" item={item} />,
+        ({ item }: { item: IPost }) => (
+            <PostItem type="testimony" item={item} />
+        ),
         []
     );
 

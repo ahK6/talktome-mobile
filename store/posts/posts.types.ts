@@ -11,6 +11,8 @@ export interface IPosts {
   searchPagination: ISearchPostsResponse['pagination'] | null;
   searchFilters: ISearchPostsResponse['filters'] | null;
   searchStatus: AsyncActionStatus;
+  selectedKeyword: ISearchByKeywordParams | null;
+  activeTab: number;
 }
 
 export interface IKeywords {
@@ -62,6 +64,7 @@ export interface IPostDetail {
   _id: string;
   title: string;
   content: string;
+  type: string;
   keywords: string[];
   status: string;
   idUserCreator: string;
@@ -109,4 +112,9 @@ export interface ISearchPostsResponse {
     keywords: string[];
     type: string;
   };
+}
+
+export interface ISearchByKeywordParams {
+  keyword: string;
+  type: PostTypes;
 }

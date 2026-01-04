@@ -19,7 +19,8 @@ export const useHomePosts = ({type}: IUseHomePostsProps) => {
     postsHelpingListStatus,
     keywords,
     searchResults,
-    searchStatus 
+    searchStatus,
+    selectedKeyword,
   } = useSelector((state: RootState) => state.posts);
 
   const {
@@ -159,6 +160,7 @@ export const useHomePosts = ({type}: IUseHomePostsProps) => {
     displayStatus,
     keywords,
     isRefreshing,
+    selectedKeyword,
     
     // Search state
     searchQuery,
